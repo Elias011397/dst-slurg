@@ -1,0 +1,104 @@
+-- food_values is a dictionary with food prefab names as keys and stat-dictionaries as values.
+-- The stat-dictionaries have stat-names as keys and the effect on each stat as values.
+-- If you want a stat not to be affected, you can just omit it from the stat-dictionary.
+local food_stat_dict = {
+	spoiled_food = { health = 1, sanity = 1, hunger = 3 },
+}
+
+-- This is the ONLY function you should be making changes to.
+local function calculateFoodValues(food)
+	-- https://forums.kleientertainment.com/forums/topic/111519-tutorial-fun-with-food/?fbclid=IwAR0rY6fD0Ezh01gWGEwtFz-fjmeGrmz7oA7swgNT0Owfscm437eSdaKiHj8
+	-- We want the caller of this function to be told whether our code made changes to the food.
+	-- Therefore, we also send back a bool, called changesweremade, which we set to true if we change anything.
+	-- In this case it's very simple. If we find the food in our food_stats, we will make changes to it.
+	local changesweremade = false
+	
+	-- Local variables to hold our food values.
+	local healthval, hungerval, sanityval = 0, 0, 0
+	
+	---------- ONLY EDIT BELOW THIS LINE ----------
+	
+	-- HERE you make your changes to the values, if you want to affect this particular food.
+	
+	-- For this example, we will make use of our food_stat_dict to determine whether to change the food,
+	-- and what to change its values to.
+	
+	-- We look up the food values in our dictionary, using the prefab-variable (prefab identifier)
+	-- of the item we are eating.
+	local food_stats = food_stat_dict[food.prefab]
+	
+	-- If we found an entry in our food_stat_dict dictionary for the food...
+	if food_stats ~= nil then
+		-- We indicate that we made changes to the food.
+		changesweremade = true
+		
+		-- Then set our values to whatever is set for them in the dictionary,
+		-- and default to 0 if no value is given for the stat.
+		healthval = food_stats["health"] or 0
+		hungerval = food_stats["hunger"] or 0
+		sanityval = food_stats["sanity"] or 0
+	end
+	-- inst.FoodValuesChanger = function(player, food)
+	-- 	local changesweremade, healthval, hungerval, sanityval = calculateFoodValues(food)
+	-- 	if changesweremade then
+	-- 		return healthval, hungerval, sanityval
+	-- 	end
+	-- 	local e = food.components.edible
+	-- 	return e.healthvalue, e.hungervalue, e.sanityvalue
+	-- end	
+	---------- ONLY EDIT ABOVE THIS LINE ----------
+	
+	-- Return the results.
+	return changesweremade, healthval, hungerval, sanityval
+end
+
+local old_Eat = inst.components.eater.Eat
+inst.components.eater.Eat = function(self, food)
+	-- https://forums.kleientertainment.com/forums/topic/111519-tutorial-fun-with-food/?fbclid=IwAR0rY6fD0Ezh01gWGEwtFz-fjmeGrmz7oA7swgNT0Owfscm437eSdaKiHj8
+	-- Make a local variable holding the edible component of the food (optimization).
+	local edible_comp = food.components.edible
+	print("DERPDERP0")
+	-- Make a local variable saying whether we made changes to the food.
+	local changesweremade = false
+	
+	-- If the food has an edible component...
+	if edible_comp then
+		-- Local variables to hold the new food values.
+		local healthval, hungerval, sanityval
+		
+		-- Calculate the food values, and let us know if changes were made to them.
+		changesweremade, healthval, hungerval, sanityval = calculateFoodValues(food)
+		
+		if changesweremade then
+			-- We first save the original food values, since we want to reset them after changing them temporarily for our character.
+			edible_comp.originalhealthvalue = edible_comp.healthvalue
+			edible_comp.originalhungervalue = edible_comp.hungervalue
+			edible_comp.originalsanityvalue = edible_comp.sanityvalue
+			
+			-- We change the food to have our new stat values, and default to 0 if the stat was omitted from the dictionary entry.
+			edible_comp.healthvalue = healthval
+			edible_comp.hungervalue = hungerval
+			edible_comp.sanityvalue = sanityval
+		end
+	end
+	
+	-- Call the original Eat function, while the food has our new values, and save the result in a variable.
+	local returnvalue = old_Eat(self, food)
+	
+	-- If we made changes to the food, and the food is still valid (meaning it has not been destroyed
+	-- because it was the last in the stack), and the edible component is still accessible...
+	if food:IsValid() and changesweremade then
+		-- We reset the food values after eating it.
+		edible_comp.healthvalue = edible_comp.originalhealthvalue
+		edible_comp.hungervalue = edible_comp.originalhungervalue
+		edible_comp.sanityvalue = edible_comp.originalsanityvalue
+		
+		-- Remove the temporary values from the food to save memory.
+		edible_comp.originalhealthvalue = nil
+		edible_comp.originalhungervalue = nil
+		edible_comp.originalsanityvalue = nil
+	end
+	
+	-- Then we return the value returned by the original Eat function.
+	return returnvalue
+end

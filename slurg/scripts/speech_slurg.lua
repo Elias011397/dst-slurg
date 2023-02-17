@@ -253,8 +253,8 @@ return {
 	ANNOUNCE_EAT =
 	{
 		GENERIC = "Yum!",
-		PAINFUL = "I don't feel so good.",
-		SPOILED = "Yuck! That was terrible!",
+		PAINFUL = "Slurg perseveres all",
+		SPOILED = "Very delicious",
 		STALE = "I think that was starting to turn.",
 		INVALID = "I can't eat that!",
         YUCKY = "Putting that in my mouth would be disgusting!",

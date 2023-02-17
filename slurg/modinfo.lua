@@ -2,7 +2,7 @@
 name = "Slurg"
 description = "Slurg the Goo"
 author = "UnNerfable"
-version = "1" -- This is the version of the template. Change it to your own number.
+version = "1.04" -- This is the version of the template. Change it to your own number.
 
 -- This is the URL name of the mod's thread on the forum; the part after the ? and before the first & in the url
 -- forumthread = "/files/file/950-extended-sample-character/"
