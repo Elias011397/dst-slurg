@@ -90,7 +90,53 @@ for _, prefabname in ipairs(SLURG_GARBAGE_PREFABS) do
 	end)
 end
 
+-- Item Info Updated shows food values client side, reading them from its own
+-- per-prefab cache. It has no hook for other mods: each character it supports
+-- is written into GetEdibleValues by name (wortox, wormwood, wurt, wathgrithr),
+-- so Slurg's numbers never appeared. Patch that method to ask Slurg instead.
+--
+-- Its cache holds the vanilla values, and on a client the item itself has no
+-- edible component, so the cached numbers are passed in as the base to work
+-- from. Tags do replicate, so the rawmeat, monstermeat and mushroom rules
+-- still resolve correctly here.
+--
+-- Deferred to AddSimPostInit because AddClassPostConstruct and require resolve
+-- immediately, and Item Info's script path only exists once it has loaded. The
+-- whole thing is guarded so the mod is unaffected when Item Info is absent.
+local function PatchItemInfo()
+	local ok, ItemInfoDesc = pcall(GLOBAL.require, "widgets/iteminfo_desc")
+	if not ok or type(ItemInfoDesc) ~= "table" or ItemInfoDesc.GetEdibleValues == nil then
+		return
+	end
+	if ItemInfoDesc.slurg_patched then
+		return
+	end
+	ItemInfoDesc.slurg_patched = true
+
+	local old_GetEdibleValues = ItemInfoDesc.GetEdibleValues
+	ItemInfoDesc.GetEdibleValues = function(self, base_inst, inst)
+		local hunger, sanity, health = old_GetEdibleValues(self, base_inst, inst)
+
+		local player = GLOBAL.ThePlayer
+		if player ~= nil and player.prefab == "slurg" and player.FoodValuesChanger ~= nil
+			and inst ~= nil and base_inst ~= nil and base_inst.components.edible ~= nil then
+
+			local e = base_inst.components.edible
+			local h, g, sn = player:FoodValuesChanger(inst, e.health, e.hunger, e.sanity)
+			if sn ~= nil then
+				-- this function returns hunger, sanity, health, in that order
+				return g, sn, h
+			end
+		end
+
+		return hunger, sanity, health
+	end
+end
+
+AddSimPostInit(PatchItemInfo)
+
 -- The skins shown in the cycle view window on the character select screen.
+
 -- A good place to see what you can put in here is in skinutils.lua, in the function GetSkinModes
 local skin_modes = {
     {

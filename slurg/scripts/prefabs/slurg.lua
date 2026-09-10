@@ -256,16 +256,19 @@ end
 --   3. mushrooms carry any health penalty over into sanity instead of taking it
 --      as damage, and keep their remaining penalties
 --   4. everything else loses its penalties entirely
-local function calculateFoodValues(food, eater)
+-- basehealth, basehunger and basesanity are optional. Display mods run client
+-- side, where food has no edible component at all, so they pass the vanilla
+-- numbers in from their own cache instead.
+local function calculateFoodValues(food, eater, basehealth, basehunger, basesanity)
 	local edible = food.components.edible
-	if edible == nil then
+	if edible == nil and basehealth == nil then
 		return false, 0, 0, 0
 	end
 
 	-- Start from the food's own values so rules 3 and 4 have something to act on.
-	local healthval = edible.healthvalue
-	local hungerval = edible.hungervalue
-	local sanityval = edible.sanityvalue
+	local healthval = basehealth or (edible ~= nil and edible.healthvalue) or 0
+	local hungerval = basehunger or (edible ~= nil and edible.hungervalue) or 0
+	local sanityval = basesanity or (edible ~= nil and edible.sanityvalue) or 0
 
 	local food_stats = food_stat_dict[food.prefab]
 	if food_stats ~= nil then
@@ -322,11 +325,12 @@ local common_postinit = function(inst)
 	-- when it returns a non-nil sanity value. Defined in common_postinit so it
 	-- exists on clients too, and only ever on Slurg, so other players keep
 	-- seeing the normal values.
-	inst.FoodValuesChanger = function(player, food)
+	inst.FoodValuesChanger = function(player, food, basehealth, basehunger, basesanity)
 		if food == nil then
 			return
 		end
-		local changed, healthval, hungerval, sanityval = calculateFoodValues(food, player)
+		local changed, healthval, hungerval, sanityval =
+			calculateFoodValues(food, player, basehealth, basehunger, basesanity)
 		if changed then
 			return healthval, hungerval, sanityval
 		end
