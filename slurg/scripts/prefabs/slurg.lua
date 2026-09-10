@@ -8,7 +8,7 @@ local assets = {
 
 -- char stats
 TUNING.SLURG_HEALTH = 50
-TUNING.SLURG_HUNGER = 150
+TUNING.SLURG_HUNGER = 100
 TUNING.SLURG_SANITY = 150
 
 -- leveling: eating spoiled food raises inst.level from 0 up to SLURG_MAX_LEVEL
@@ -17,6 +17,17 @@ TUNING.SLURG_MAX_LEVEL = 5000
 -- for reference, TUNING.WILSON_RUN_SPEED is 6.
 TUNING.SLURG_SPEED_MIN = 4.0
 TUNING.SLURG_SPEED_MAX = 6.0
+-- max hunger scales from SLURG_HUNGER at level 0 to this at SLURG_MAX_LEVEL
+TUNING.SLURG_HUNGER_MAX = 1000
+
+-- passive health regen, see components/healthregen.lua
+TUNING.SLURG_REGEN_TICK = 1            -- seconds between regen ticks
+TUNING.SLURG_REGEN_HUNGER_MIN = 0.50   -- no regen below this fullness
+TUNING.SLURG_REGEN_HUNGER_PEAK = 0.90  -- fastest regen at or above this fullness
+TUNING.SLURG_REGEN_PERIOD_FLOOR = 60   -- seconds per hp at HUNGER_MIN
+TUNING.SLURG_REGEN_PERIOD_PEAK = 10    -- seconds per hp at HUNGER_PEAK
+TUNING.SLURG_REGEN_COEFF_MIN = 0.5     -- regen speed multiplier at level 0
+TUNING.SLURG_REGEN_COEFF_MAX = 1.0     -- regen speed multiplier at SLURG_MAX_LEVEL
 
 -- char starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.SLURG = {
@@ -51,7 +62,7 @@ local function onload(inst, data)
 		inst.components.health:SetPercent(data.currenthealth)
 		local healthbonus = .05
 		local damagebonus = .0003
-		local hungerbonus = .07
+		local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
 		inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
 		local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
 		local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
@@ -80,7 +91,7 @@ end
 local function applyupgrades(inst)
 		local healthbonus = .05
 		local damagebonus = .0003
-		local hungerbonus = .07
+		local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
 		inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
 		local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
 		local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
@@ -188,6 +199,8 @@ local master_postinit = function(inst)
 	inst.components.hunger:SetMax(TUNING.SLURG_HUNGER)
 	inst.components.sanity:SetMax(TUNING.SLURG_SANITY)
 	applyupgrades(inst)
+	-- passive health regen, scaled by fullness and level
+	inst:AddComponent("healthregen")
 	-- char damage multiplier (optional)
     inst.components.combat.damagemultiplier = 1
 	-- char hunger rate (optional)
