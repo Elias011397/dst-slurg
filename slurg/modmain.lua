@@ -102,19 +102,30 @@ end
 -- patching, no require, and no dependency on their script paths. Everything
 -- below is guarded and simply does nothing when neither mod is installed.
 local function PatchItemInfo()
+	-- These globals only exist when Item Info is loaded, which on a server it is
+	-- not. Read them with rawget: the game installs strict.lua, whose __index
+	-- raises "variable is not declared" for a plain read of an absent global
+	-- rather than returning nil.
+	local function GetGlobal(name)
+		return GLOBAL.rawget(GLOBAL, name)
+	end
+
 	-- Character traits. Both versions read these plain globals, so registering
 	-- Slurg here stops them applying spoilage and monster meat penalties he does
 	-- not actually take.
-	if GLOBAL.StrongStomachEaters ~= nil then
-		GLOBAL.StrongStomachEaters.slurg = true
+	local strongstomach = GetGlobal("StrongStomachEaters")
+	if strongstomach ~= nil then
+		strongstomach.slurg = true
 	end
-	if GLOBAL.IgnoreSpoilageEaters ~= nil then
-		GLOBAL.IgnoreSpoilageEaters.slurg = true
+	local ignorespoilage = GetGlobal("IgnoreSpoilageEaters")
+	if ignorespoilage ~= nil then
+		ignorespoilage.slurg = true
 	end
 
 	-- Custom values. The current version routes every lookup through a global
 	-- InfoFetcher singleton, which is the safest thing to wrap.
-	local fetcher = GLOBAL.MOD_ITEMINFO ~= nil and GLOBAL.MOD_ITEMINFO.INFO_FETCHER or nil
+	local iteminfo = GetGlobal("MOD_ITEMINFO")
+	local fetcher = iteminfo ~= nil and iteminfo.INFO_FETCHER or nil
 	if fetcher ~= nil and fetcher.GetEdibleValues ~= nil and not fetcher.slurg_patched then
 		fetcher.slurg_patched = true
 
