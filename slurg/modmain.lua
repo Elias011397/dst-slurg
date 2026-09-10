@@ -94,6 +94,7 @@ GLOBAL.FOODTYPE.SLURGROT = "SLURGROT"
 
 local SLURG_GARBAGE_PREFABS = {
 	"poop",
+	"guano",
 }
 
 for _, prefabname in ipairs(SLURG_GARBAGE_PREFABS) do
