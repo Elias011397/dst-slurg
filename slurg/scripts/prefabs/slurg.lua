@@ -133,7 +133,6 @@ local function calculateFoodValues(food)
 	-- Therefore, we also send back a bool, called changesweremade, which we set to true if we change anything.
 	-- In this case it's very simple. If we find the food in our food_stats, we will make changes to it.
 	local changesweremade = false
-	print("DERPDERP0")
 	-- Local variables to hold our food values.
 	local healthval, hungerval, sanityval = 0, 0, 0
 	
@@ -210,7 +209,6 @@ local master_postinit = function(inst)
     inst.components.eater.Eat = function(self, food)
         -- Make a local variable holding the edible component of the food (optimization).
         local edible_comp = food.components.edible
-        print("DERPDERP1")
         -- Make a local variable saying whether we made changes to the food.
         local changesweremade = false
         
