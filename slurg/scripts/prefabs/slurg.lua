@@ -273,10 +273,17 @@ local function calculateFoodValues(food, eater)
 		hungerval = food_stats["hunger"] or 0
 		sanityval = food_stats["sanity"] or 0
 
-		-- scale the hunger value with how big the eater's belly has grown
+		-- scale the hunger value with how big the eater's belly has grown. Read
+		-- the max through the replica so this is also correct on clients, where
+		-- the hunger component itself does not exist but the display hook still
+		-- needs the right number.
 		local hungerpct = food_stats["hungerpct"]
-		if hungerpct ~= nil and eater ~= nil and eater.components.hunger ~= nil then
-			hungerval = hungerval + (hungerpct * eater.components.hunger.max)
+		if hungerpct ~= nil and eater ~= nil then
+			local maxhunger = (eater.components.hunger ~= nil and eater.components.hunger.max)
+				or (eater.replica ~= nil and eater.replica.hunger ~= nil and eater.replica.hunger:Max())
+			if maxhunger ~= nil then
+				hungerval = hungerval + (hungerpct * maxhunger)
+			end
 		end
 	else
 		local multiplier = GetFoodMultiplier(food)
@@ -308,6 +315,22 @@ end
 local common_postinit = function(inst) 
 	-- Minimap icon
 	inst.MiniMapEntity:SetIcon( "slurg.tex" )
+
+	-- Food display mods read the edible component directly, which still holds
+	-- the vanilla numbers, so they show values Slurg will never actually get.
+	-- Show Me looks for this on the viewing player and uses our numbers instead
+	-- when it returns a non-nil sanity value. Defined in common_postinit so it
+	-- exists on clients too, and only ever on Slurg, so other players keep
+	-- seeing the normal values.
+	inst.FoodValuesChanger = function(player, food)
+		if food == nil then
+			return
+		end
+		local changed, healthval, hungerval, sanityval = calculateFoodValues(food, player)
+		if changed then
+			return healthval, hungerval, sanityval
+		end
+	end
 	inst:ListenForEvent("equip", function()	
 	inst.AnimState:ClearOverrideSymbol("swap_hat")	
 	inst.AnimState:Show("hair")		
@@ -406,15 +429,6 @@ local master_postinit = function(inst)
         -- Then we return the value returned by the original Eat function.
         return returnvalue
     end
-    -- display values for food for mods like 'ShowMe'
-    -- inst.FoodValuesChanger = function(player, food)
-    --     local changesweremade, healthval, hungerval, sanityval = calculateFoodValues(food)
-    --     if changesweremade then
-    --         return healthval, hungerval, sanityval
-    --     end
-    --     local e = food.components.edible
-    --     return e.healthvalue, e.hungervalue, e.sanityvalue
-    -- end
 end
 
 return MakePlayerCharacter("slurg", prefabs, assets, common_postinit, master_postinit)
