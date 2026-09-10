@@ -94,7 +94,7 @@ local function oneat(inst, food)
 	if food and food.components.edible and food:HasTag("spoiled_food") then
 		if inst.level < 5000 then
 			inst.level = inst.level + 1
-			inst.SoundEmitter:PlaySound("dontstarve/characters/wx78/levelup")
+			inst.SoundEmitter:PlaySound("dontstarve/characters/slurg/slurg_LU")
 		end	
 		applyupgrades(inst) 
 	end
@@ -105,6 +105,7 @@ end
 -- If you want a stat not to be affected, you can just omit it from the stat-dictionary.
 local food_stat_dict = {
 	spoiled_food = { health = 3, sanity = 1, hunger = 1 },
+	wetgoop = { health = 5, sanity = 5, hunger = 5 },
 	gears = {health = 20, sanity = 20, hunger = 25},
 }
 
@@ -170,7 +171,7 @@ local master_postinit = function(inst)
     end
 	-- applyupgrades(inst)
 	-- choose which sounds this character will play
-	inst.soundsname = "webber"
+	inst.soundsname = "slurg"
 	-- Uncomment if "wathgrithr"(Wigfrid) or "webber" voice is used
     inst.talker_path_override = "dontstarve_DLC001/characters/"
 	inst.OnSave = onsave 

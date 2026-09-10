@@ -24,7 +24,11 @@ Assets = {
     Asset( "ATLAS", "images/names_slurg.xml" ),
 	Asset( "IMAGE", "images/names_gold_slurg.tex" ),
     Asset( "ATLAS", "images/names_gold_slurg.xml" ),
+	Asset("SOUNDPACKAGE","sound/slurg.fev"),
+	Asset("SOUND","sound/slurg.fsb"),
 }
+RemapSoundEvent("dontstarve/characters/slurg","slurg/slurg_sounds")
+RemapSoundEvent("dontstarve/characters/slurg/slurg_LU","slurg/slurg_sounds/slurg_LU")
 
 AddMinimapAtlas("images/map_icons/slurg.xml")
 	
@@ -32,7 +36,7 @@ local require = GLOBAL.require
 local STRINGS = GLOBAL.STRINGS    
 
 -- The character select screen lines
-STRINGS.CHARACTER_TITLES.slurg = "Slurg the Goo"
+STRINGS.CHARACTER_TITLES.slurg = "Slurg the Slime"
 STRINGS.CHARACTER_NAMES.slurg = "slurg"
 STRINGS.CHARACTER_DESCRIPTIONS.slurg = "*Iron Gut\n*High Potential\n*Craves frequent food"
 STRINGS.CHARACTER_QUOTES.slurg = "\"A wild Slurg has appeared\""
