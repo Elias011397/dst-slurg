@@ -146,7 +146,7 @@ local food_stat_dict = {
 	spoiled_fish = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
 	spoiled_fish_small = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
 	rottenegg = { health = 25, sanity = 10, hunger = 5, hungerpct = 0.05, levels = 5 },
-	poop = { health = 0, sanity = 5, hunger = 10, hungerpct = 0.03, levels = 2 },
+	poop = { health = 4, sanity = 5, hunger = 10, hungerpct = 0.03, levels = 2 },
 	guano = { health = 5, sanity = 5, hunger = 10, hungerpct = 0.04, levels = 2 },
 	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10, levels = 25 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5 },
@@ -178,6 +178,22 @@ local function GetFoodMultiplier(food)
 	return nil
 end
 
+-- Mushrooms are the exception to Slurg taking no penalties, so they need to be
+-- identified exactly. The mushroom tag alone is not enough: mushrooms.lua only
+-- tags the raw caps (capcommonfn), not the cooked ones, and two of the three
+-- mushrooms that carry a health penalty are cooked. Match known prefabs too,
+-- and keep the tag check so mushrooms added by other mods are still covered.
+local mushroom_prefabs = {
+	red_cap = true,   red_cap_cooked = true,
+	green_cap = true, green_cap_cooked = true,
+	blue_cap = true,  blue_cap_cooked = true,
+	moon_cap = true,  moon_cap_cooked = true,
+}
+
+local function IsMushroom(food)
+	return food:HasTag("mushroom") or mushroom_prefabs[food.prefab] == true
+end
+
 -- Eating Slurg food raises his level by that food's levels value.
 local function oneat(inst, food)
 	if food == nil or food.components.edible == nil then
@@ -196,32 +212,27 @@ local function oneat(inst, food)
 	applyupgrades(inst)
 end
 
--- This is the ONLY function you should be making changes to.
+-- Works out what a food is worth to Slurg. Every edible is passed through here,
+-- because the last two rules apply to all food, not only the food we name.
+--
+--   1. a named entry in food_stat_dict replaces the values outright
+--   2. otherwise a category multiplier scales the food's own values
+--   3. mushrooms carry any health penalty over into sanity instead of taking it
+--      as damage, and keep their remaining penalties
+--   4. everything else loses its penalties entirely
 local function calculateFoodValues(food, eater)
-	-- We want the caller of this function to be told whether our code made changes to the food.
-	-- Therefore, we also send back a bool, called changesweremade, which we set to true if we change anything.
-	-- In this case it's very simple. If we find the food in our food_stats, we will make changes to it.
-	local changesweremade = false
-	-- Local variables to hold our food values.
-	local healthval, hungerval, sanityval = 0, 0, 0
-	
-	---------- ONLY EDIT BELOW THIS LINE ----------
-	-- HERE you make your changes to the values, if you want to affect this particular food.
-	
-	-- For this example, we will make use of our food_stat_dict to determine whether to change the food,
-	-- and what to change its values to.
-	
-	-- We look up the food values in our dictionary, using the prefab-variable (prefab identifier)
-	-- of the item we are eating.
+	local edible = food.components.edible
+	if edible == nil then
+		return false, 0, 0, 0
+	end
+
+	-- Start from the food's own values so rules 3 and 4 have something to act on.
+	local healthval = edible.healthvalue
+	local hungerval = edible.hungervalue
+	local sanityval = edible.sanityvalue
+
 	local food_stats = food_stat_dict[food.prefab]
-	
-	-- If we found an entry in our food_stat_dict dictionary for the food...
 	if food_stats ~= nil then
-		-- We indicate that we made changes to the food.
-		changesweremade = true
-		
-		-- Then set our values to whatever is set for them in the dictionary,
-		-- and default to 0 if no value is given for the stat.
 		healthval = food_stats["health"] or 0
 		hungerval = food_stats["hunger"] or 0
 		sanityval = food_stats["sanity"] or 0
@@ -232,19 +243,30 @@ local function calculateFoodValues(food, eater)
 			hungerval = hungerval + (hungerpct * eater.components.hunger.max)
 		end
 	else
-		-- No exact entry, so fall back to the category multipliers.
 		local multiplier = GetFoodMultiplier(food)
-		if multiplier ~= nil and food.components.edible ~= nil then
-			changesweremade = true
-			healthval = food.components.edible.healthvalue * multiplier
-			hungerval = food.components.edible.hungervalue * multiplier
-			sanityval = food.components.edible.sanityvalue * multiplier
+		if multiplier ~= nil then
+			healthval = healthval * multiplier
+			hungerval = hungerval * multiplier
+			sanityval = sanityval * multiplier
 		end
 	end
-	---------- ONLY EDIT ABOVE THIS LINE ----------
-	
-	-- Return the results.
-	return changesweremade, healthval, hungerval, sanityval
+
+	if IsMushroom(food) then
+		-- Mushrooms are an exception and keep their penalties. A health penalty is
+		-- carried over into sanity additively rather than being taken as damage, so
+		-- a mushroom that already costs sanity ends up costing more of it.
+		if healthval < 0 then
+			sanityval = sanityval + healthval
+			healthval = 0
+		end
+	else
+		-- Slurg takes no stat losses from anything that is not a mushroom.
+		healthval = math.max(healthval, 0)
+		hungerval = math.max(hungerval, 0)
+		sanityval = math.max(sanityval, 0)
+	end
+
+	return true, healthval, hungerval, sanityval
 end
 
 local common_postinit = function(inst) 
