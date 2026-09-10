@@ -13,12 +13,16 @@ TUNING.SLURG_SANITY = 150
 
 -- leveling: eating spoiled food raises inst.level from 0 up to SLURG_MAX_LEVEL
 TUNING.SLURG_MAX_LEVEL = 5000
--- Effective in-game speed, scaling linearly from MIN at level 0 to MAX at
--- SLURG_MAX_LEVEL. These are real speeds as felt in game, NOT the value that
--- goes into locomotor.runspeed; see applyupgrades for why they differ.
+-- Effective in-game speed. These are real speeds as felt in game, NOT the
+-- value that goes into locomotor.runspeed; see updatesize for why they differ.
 -- For reference, TUNING.WILSON_RUN_SPEED is 6.
-TUNING.SLURG_SPEED_MIN = 6.0
-TUNING.SLURG_SPEED_MAX = 12.0
+--
+-- Speed ramps from EMPTY up to the level's top speed across the same fullness
+-- band as size, so the range widens with level: 4 to 8 at level 0, 4 to 12 at
+-- the cap. The 50% mark therefore rises with level rather than being pinned.
+TUNING.SLURG_SPEED_EMPTY = 4.0  -- effective speed when empty, at every level
+TUNING.SLURG_SPEED_MIN = 8.0    -- effective speed when full, at level 0
+TUNING.SLURG_SPEED_MAX = 12.0   -- effective speed when full, at SLURG_MAX_LEVEL
 -- Physical size. Level sets the CAP; how much of that cap Slurg actually
 -- reaches is decided by how full he is. Size also multiplies movement speed,
 -- so a hungry Slurg is both small and slow.
@@ -74,10 +78,21 @@ local function updatesize(inst)
 	end
 
 	local cap = inst.scalecap or TUNING.SLURG_SCALE_MIN
+	local topspeed = inst.topspeed or TUNING.SLURG_SPEED_MIN
 	local span = TUNING.SLURG_SIZE_HUNGER_MAX - TUNING.SLURG_SIZE_HUNGER_MIN
 	local t = math.clamp((hunger:GetPercent() - TUNING.SLURG_SIZE_HUNGER_MIN) / span, 0, 1)
 
-	inst:ApplyScale("sizecorrection", TUNING.SLURG_SCALE_NORMAL + ((cap - TUNING.SLURG_SCALE_NORMAL) * t))
+	local scale = TUNING.SLURG_SCALE_NORMAL + ((cap - TUNING.SLURG_SCALE_NORMAL) * t)
+	inst:ApplyScale("sizecorrection", scale)
+
+	-- Speed has its own curve rather than riding on size, so the two can be
+	-- tuned apart. The engine multiplies runspeed by the Transform scale
+	-- (locomotor.lua:730), so divide the scale back out to land on the
+	-- effective speed we actually want.
+	if inst.components.locomotor ~= nil then
+		local effective = TUNING.SLURG_SPEED_EMPTY + ((topspeed - TUNING.SLURG_SPEED_EMPTY) * t)
+		inst.components.locomotor.runspeed = effective / scale
+	end
 end
 
 -- Recalculate everything that scales with Slurg's level: size cap, speed,
@@ -92,13 +107,8 @@ local function applyupgrades(inst)
 	-- Level only sets the cap. updatesize decides how much of it he is at.
 	inst.scalecap = TUNING.SLURG_SCALE_MIN + ((TUNING.SLURG_SCALE_MAX - TUNING.SLURG_SCALE_MIN) * levelpct)
 
-	-- In-game speed is locomotor.runspeed multiplied by the Transform scale: the
-	-- engine applies motor velocity in the entity's local frame
-	-- (locomotor.lua:730). SLURG_SPEED_MIN and _MAX are the speed we want at
-	-- FULL size for this level, so divide the cap back out. runspeed then stays
-	-- put while shrinking with hunger slows him down on its own.
-	local targetspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
-	local newspeed = targetspeed / inst.scalecap
+	-- Top speed for this level, reached at full. updatesize ramps up to it.
+	inst.topspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
 	local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
 	local newdamage = (1.0 + (damagebonus * inst.level))
 	local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
@@ -106,7 +116,6 @@ local function applyupgrades(inst)
 	local health_percent = inst.components.health:GetPercent()
 	local hunger_percent = inst.components.hunger:GetPercent()
 
-	inst.components.locomotor.runspeed = newspeed
 	inst.components.combat.damagemultiplier = newdamage
 	inst.components.health.maxhealth = newhealth
 	inst.components.hunger:SetMax(newhunger)
