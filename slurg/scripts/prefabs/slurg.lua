@@ -220,8 +220,13 @@ local master_postinit = function(inst)
 		inst.components.eater:SetCanEatHorrible()
 		inst.components.eater:SetCanEatGears()
 		inst.components.eater:SetCanEatRaw()
-		-- droppings, made edible for Slurg alone in modmain.lua
+		-- Droppings, made edible for Slurg alone in modmain.lua.
+		-- caneat is what lets him eat it at all. preferseating is separate and
+		-- also required: without it the stategraph refuses the food and pushes
+		-- wonteatfood instead (SGwilson.lua:1172). The vanilla SetCanEat*
+		-- helpers add to both lists for exactly this reason.
 		table.insert(inst.components.eater.caneat, FOODTYPE.SLURGROT)
+		table.insert(inst.components.eater.preferseating, FOODTYPE.SLURGROT)
 		inst:AddTag(FOODTYPE.SLURGROT .. "_eater")
         inst.components.eater:SetOnEatFn(oneat)
     end
