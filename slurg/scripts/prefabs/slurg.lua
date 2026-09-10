@@ -108,16 +108,6 @@ local function applyupgrades(inst)
 		inst.components.hunger:SetPercent(hunger_percent)
 end
 
-local function oneat(inst, food)
-	if food and food.components.edible and food:HasTag("spoiled_food") then
-		if inst.level < TUNING.SLURG_MAX_LEVEL then
-			inst.level = inst.level + 1
-			inst.SoundEmitter:PlaySound("dontstarve/characters/slurg/slurg_LU")
-		end	
-		applyupgrades(inst) 
-	end
-end
-
 -- Slurg's own food values, keyed by food prefab name. Omit a stat to leave it at 0.
 --
 -- health and sanity are flat amounts. hunger is flat PLUS hungerpct of Slurg's
@@ -127,17 +117,40 @@ end
 --
 -- Plain rot at hunger 1 / hungerpct 0.01 gives 2 at level 0 (max 100) and 11
 -- at the level cap (max 1000).
+--
+-- levels is how much eating one raises inst.level. Leave it out and the food
+-- still gets Slurg's values but does not grow him, which is how wetgoop and
+-- gears behave. This table is the single source of truth for what counts as
+-- Slurg food; nothing keys off tags any more.
 local food_stat_dict = {
-	spoiled_food = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
-	spoiled_fish = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
-	spoiled_fish_small = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
-	rottenegg = { health = 50, sanity = 10, hunger = 5, hungerpct = 0.05 },
-	poop = { health = 0, sanity = 5, hunger = 10, hungerpct = 0.03 },
-	guano = { health = 5, sanity = 5, hunger = 10, hungerpct = 0.04 },
-	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10 },
+	spoiled_food = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
+	spoiled_fish = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
+	spoiled_fish_small = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
+	rottenegg = { health = 50, sanity = 10, hunger = 5, hungerpct = 0.05, levels = 5 },
+	poop = { health = 0, sanity = 5, hunger = 10, hungerpct = 0.03, levels = 2 },
+	guano = { health = 5, sanity = 5, hunger = 10, hungerpct = 0.04, levels = 2 },
+	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10, levels = 25 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5 },
 	gears = {health = 20, sanity = 20, hunger = 25},
 }
+
+-- Eating Slurg food raises his level by that food's levels value.
+local function oneat(inst, food)
+	if food == nil or food.components.edible == nil then
+		return
+	end
+
+	local food_stats = food_stat_dict[food.prefab]
+	if food_stats == nil or food_stats.levels == nil then
+		return
+	end
+
+	if inst.level < TUNING.SLURG_MAX_LEVEL then
+		inst.level = math.min(inst.level + food_stats.levels, TUNING.SLURG_MAX_LEVEL)
+		inst.SoundEmitter:PlaySound("dontstarve/characters/slurg/slurg_LU")
+	end
+	applyupgrades(inst)
+end
 
 -- This is the ONLY function you should be making changes to.
 local function calculateFoodValues(food, eater)

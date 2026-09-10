@@ -49,37 +49,6 @@ STRINGS.CHARACTERS.SLURG = require "speech_slurg"
 STRINGS.NAMES.SLURG = "slurg"
 STRINGS.SKIN_NAMES.slurg_none = "slurg"
 
--- local function GetPlayer()
---     return GLOBAL.ThePlayer
--- end
-
--- function SlurgSpoiledFood(inst)
---     if GetPlayer() == nil then
---         return
---     end 
---     if GetPlayer().prefab == "slurg" then
---         inst:AddComponent("edible")
---         inst:AddTag("spoiled_food")
---         inst.components.edible.healthvalue = 3
---         inst.components.edible.sanityvalue = 5
---         inst.components.edible.hungervalue = 10
--- end
-
--- AddPrefabPostInit("spoiled_food", SlurgSpoiledFood)
-
-AddPrefabPostInit("spoiled_food", function(inst)
-    -- if GetPlayer() == nil then
-    --     return
-    -- end 
-    -- if GetPlayer().prefab == "slurg" then
-    inst:AddComponent("edible")
-    inst:AddTag("spoiled_food")
-        -- inst.components.edible.healthvalue = 3
-        -- inst.components.edible.sanityvalue = 5
-        -- inst.components.edible.hungervalue = 10
-    -- end
-end)
-
 -- Droppings are not food in vanilla, so Slurg needs an edible component added
 -- to them. A plain edible component would make them food for EVERY character,
 -- so they get their own food type instead: Eater:TestFood only matches an
