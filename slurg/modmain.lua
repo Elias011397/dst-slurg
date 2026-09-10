@@ -101,6 +101,18 @@ end
 -- Both versions do leave what we need in globals though, so this needs no file
 -- patching, no require, and no dependency on their script paths. Everything
 -- below is guarded and simply does nothing when neither mod is installed.
+-- TEMPORARY diagnostics for the Item Info integration. Everything it prints is
+-- prefixed SLURGDBG so it can be grepped straight out of client_log.txt. Set
+-- SLURG_DEBUG to false, or delete this block and its callers, once the
+-- integration is confirmed working.
+local SLURG_DEBUG = true
+local slurg_logged_items = 0
+local function dbg(msg)
+	if SLURG_DEBUG then
+		print("SLURGDBG " .. tostring(msg))
+	end
+end
+
 local function PatchItemInfo()
 	-- These globals only exist when Item Info is loaded, which on a server it is
 	-- not. Read them with rawget: the game installs strict.lua, whose __index
@@ -126,14 +138,35 @@ local function PatchItemInfo()
 	-- InfoFetcher singleton, which is the safest thing to wrap.
 	local iteminfo = GetGlobal("MOD_ITEMINFO")
 	local fetcher = iteminfo ~= nil and iteminfo.INFO_FETCHER or nil
+
+	dbg("patch: isclient=" .. tostring(GLOBAL.TheNet:GetIsClient())
+		.. " isserver=" .. tostring(GLOBAL.TheNet:GetIsServer())
+		.. " StrongStomachEaters=" .. tostring(strongstomach ~= nil)
+		.. " IgnoreSpoilageEaters=" .. tostring(ignorespoilage ~= nil)
+		.. " MOD_ITEMINFO=" .. tostring(iteminfo ~= nil)
+		.. " INFO_FETCHER=" .. tostring(fetcher ~= nil)
+		.. " GetEdibleValues=" .. tostring(fetcher ~= nil and fetcher.GetEdibleValues ~= nil))
+
 	if fetcher ~= nil and fetcher.GetEdibleValues ~= nil and not fetcher.slurg_patched then
 		fetcher.slurg_patched = true
+		dbg("patch: GetEdibleValues wrapped")
 
 		local old_GetEdibleValues = fetcher.GetEdibleValues
 		fetcher.GetEdibleValues = function(self, inst)
 			local hunger, sanity, health = old_GetEdibleValues(self, inst)
 
 			local player = GLOBAL.ThePlayer
+
+			if slurg_logged_items < 8 then
+				slurg_logged_items = slurg_logged_items + 1
+				dbg("lookup: prefab=" .. tostring(inst ~= nil and inst.prefab)
+					.. " player=" .. tostring(player ~= nil and player.prefab)
+					.. " hook=" .. tostring(player ~= nil and player.FoodValuesChanger ~= nil)
+					.. " cached=" .. tostring(self.cached_items ~= nil and inst ~= nil
+						and self.cached_items[inst.prefab] ~= nil)
+					.. " vanilla=" .. tostring(hunger) .. "/" .. tostring(sanity) .. "/" .. tostring(health))
+			end
+
 			if player ~= nil and player.prefab == "slurg"
 				and player.FoodValuesChanger ~= nil and inst ~= nil then
 
@@ -143,6 +176,10 @@ local function PatchItemInfo()
 				local e = base ~= nil and base.components ~= nil and base.components.edible or nil
 				if e ~= nil then
 					local h, g, sn = player:FoodValuesChanger(inst, e.health, e.hunger, e.sanity)
+					if slurg_logged_items <= 8 then
+						dbg("slurg values: " .. tostring(inst.prefab) .. " -> "
+							.. tostring(g) .. "/" .. tostring(sn) .. "/" .. tostring(h))
+					end
 					if sn ~= nil then
 						-- returns hunger, sanity, health, in that order
 						return g, sn, h
@@ -155,7 +192,10 @@ local function PatchItemInfo()
 	end
 end
 
-AddSimPostInit(PatchItemInfo)
+AddSimPostInit(function()
+	dbg("AddSimPostInit fired")
+	PatchItemInfo()
+end)
 
 -- The skins shown in the cycle view window on the character select screen.
 
