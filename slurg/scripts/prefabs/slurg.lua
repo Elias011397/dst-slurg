@@ -13,10 +13,16 @@ TUNING.SLURG_SANITY = 150
 
 -- leveling: eating spoiled food raises inst.level from 0 up to SLURG_MAX_LEVEL
 TUNING.SLURG_MAX_LEVEL = 5000
--- run speed scales linearly from MIN at level 0 to MAX at SLURG_MAX_LEVEL.
--- for reference, TUNING.WILSON_RUN_SPEED is 6.
-TUNING.SLURG_SPEED_MIN = 4.0
-TUNING.SLURG_SPEED_MAX = 6.0
+-- Effective in-game speed, scaling linearly from MIN at level 0 to MAX at
+-- SLURG_MAX_LEVEL. These are real speeds as felt in game, NOT the value that
+-- goes into locomotor.runspeed; see applyupgrades for why they differ.
+-- For reference, TUNING.WILSON_RUN_SPEED is 6.
+TUNING.SLURG_SPEED_MIN = 6.0
+TUNING.SLURG_SPEED_MAX = 9.0
+-- Physical size, which grows with level. This also multiplies movement speed,
+-- so applyupgrades has to divide it back out.
+TUNING.SLURG_SCALE_MIN = 1.5
+TUNING.SLURG_SCALE_MAX = 3.0
 -- max hunger scales from SLURG_HUNGER at level 0 to this at SLURG_MAX_LEVEL
 TUNING.SLURG_HUNGER_MAX = 1000
 
@@ -58,8 +64,16 @@ local function applyupgrades(inst)
 	local damagebonus = .0003
 	local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
 	local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
+	local newscale = TUNING.SLURG_SCALE_MIN + ((TUNING.SLURG_SCALE_MAX - TUNING.SLURG_SCALE_MIN) * levelpct)
 
-	local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
+	-- In-game speed is locomotor.runspeed multiplied by the Transform scale: the
+	-- engine applies motor velocity in the entity's local frame
+	-- (locomotor.lua:730), so a bigger Slurg covers more ground per unit of
+	-- runspeed. Pick the speed we actually want him to move at, then divide the
+	-- scale back out. Because his size grows faster than his speed, the runspeed
+	-- value goes DOWN with level even though he gets faster in game.
+	local targetspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
+	local newspeed = targetspeed / newscale
 	local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
 	local newdamage = (1.0 + (damagebonus * inst.level))
 	local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
@@ -67,7 +81,7 @@ local function applyupgrades(inst)
 	local health_percent = inst.components.health:GetPercent()
 	local hunger_percent = inst.components.hunger:GetPercent()
 
-	inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
+	inst:ApplyScale("sizecorrection", newscale)
 	inst.components.locomotor.runspeed = newspeed
 	inst.components.combat.damagemultiplier = newdamage
 	inst.components.health.maxhealth = newhealth
