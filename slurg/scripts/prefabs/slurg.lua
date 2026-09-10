@@ -130,6 +130,7 @@ end
 local food_stat_dict = {
 	spoiled_food = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
 	spoiled_fish = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
+	spoiled_fish_small = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5 },
 	gears = {health = 20, sanity = 20, hunger = 25},
 }
