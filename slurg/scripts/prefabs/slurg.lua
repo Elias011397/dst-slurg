@@ -18,11 +18,15 @@ TUNING.SLURG_MAX_LEVEL = 5000
 -- goes into locomotor.runspeed; see applyupgrades for why they differ.
 -- For reference, TUNING.WILSON_RUN_SPEED is 6.
 TUNING.SLURG_SPEED_MIN = 6.0
-TUNING.SLURG_SPEED_MAX = 9.0
--- Physical size, which grows with level. This also multiplies movement speed,
--- so applyupgrades has to divide it back out.
-TUNING.SLURG_SCALE_MIN = 1.5
-TUNING.SLURG_SCALE_MAX = 3.0
+TUNING.SLURG_SPEED_MAX = 12.0
+-- Physical size. Level sets the CAP; how much of that cap Slurg actually
+-- reaches is decided by how full he is. Size also multiplies movement speed,
+-- so a hungry Slurg is both small and slow.
+TUNING.SLURG_SCALE_MIN = 1.5    -- size cap at level 0
+TUNING.SLURG_SCALE_MAX = 3.0    -- size cap at SLURG_MAX_LEVEL
+TUNING.SLURG_SCALE_NORMAL = 1.0 -- size when empty, same as everyone else
+TUNING.SLURG_SIZE_HUNGER_MIN = 0.01 -- below this he is normal sized
+TUNING.SLURG_SIZE_HUNGER_MAX = 0.90 -- at or above this he is at his cap
 -- max hunger scales from SLURG_HUNGER at level 0 to this at SLURG_MAX_LEVEL
 TUNING.SLURG_HUNGER_MAX = 1000
 
@@ -56,24 +60,45 @@ local function onbecameghost(inst)
 	inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "slurg_speed_mod")
 end
 
--- Recalculate everything that scales with Slurg's level: size, speed, damage,
--- max health and max hunger. Health and hunger are put back to the percentage
--- they were at, so raising the maxes never silently heals or feeds him.
+-- Slurg swells as he fills up. An empty Slurg is normal sized like anyone
+-- else; he reaches the size cap his level allows at SLURG_SIZE_HUNGER_MAX
+-- fullness, interpolated so every hunger point in between counts.
+--
+-- Because in-game speed is runspeed multiplied by Transform scale, this
+-- throttles his speed at the same time: a starving Slurg is slow whatever
+-- his level, and only a full one gets the speed his level has earned.
+local function updatesize(inst)
+	local hunger = inst.components.hunger
+	if hunger == nil then
+		return
+	end
+
+	local cap = inst.scalecap or TUNING.SLURG_SCALE_MIN
+	local span = TUNING.SLURG_SIZE_HUNGER_MAX - TUNING.SLURG_SIZE_HUNGER_MIN
+	local t = math.clamp((hunger:GetPercent() - TUNING.SLURG_SIZE_HUNGER_MIN) / span, 0, 1)
+
+	inst:ApplyScale("sizecorrection", TUNING.SLURG_SCALE_NORMAL + ((cap - TUNING.SLURG_SCALE_NORMAL) * t))
+end
+
+-- Recalculate everything that scales with Slurg's level: size cap, speed,
+-- damage, max health and max hunger. Health and hunger are put back to the
+-- percentage they were at, so raising the maxes never silently heals or feeds
+-- him.
 local function applyupgrades(inst)
 	local healthbonus = .05
 	local damagebonus = .0003
 	local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
 	local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
-	local newscale = TUNING.SLURG_SCALE_MIN + ((TUNING.SLURG_SCALE_MAX - TUNING.SLURG_SCALE_MIN) * levelpct)
+	-- Level only sets the cap. updatesize decides how much of it he is at.
+	inst.scalecap = TUNING.SLURG_SCALE_MIN + ((TUNING.SLURG_SCALE_MAX - TUNING.SLURG_SCALE_MIN) * levelpct)
 
 	-- In-game speed is locomotor.runspeed multiplied by the Transform scale: the
 	-- engine applies motor velocity in the entity's local frame
-	-- (locomotor.lua:730), so a bigger Slurg covers more ground per unit of
-	-- runspeed. Pick the speed we actually want him to move at, then divide the
-	-- scale back out. Because his size grows faster than his speed, the runspeed
-	-- value goes DOWN with level even though he gets faster in game.
+	-- (locomotor.lua:730). SLURG_SPEED_MIN and _MAX are the speed we want at
+	-- FULL size for this level, so divide the cap back out. runspeed then stays
+	-- put while shrinking with hunger slows him down on its own.
 	local targetspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
-	local newspeed = targetspeed / newscale
+	local newspeed = targetspeed / inst.scalecap
 	local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
 	local newdamage = (1.0 + (damagebonus * inst.level))
 	local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
@@ -81,13 +106,14 @@ local function applyupgrades(inst)
 	local health_percent = inst.components.health:GetPercent()
 	local hunger_percent = inst.components.hunger:GetPercent()
 
-	inst:ApplyScale("sizecorrection", newscale)
 	inst.components.locomotor.runspeed = newspeed
 	inst.components.combat.damagemultiplier = newdamage
 	inst.components.health.maxhealth = newhealth
 	inst.components.hunger:SetMax(newhunger)
 	inst.components.health:SetPercent(health_percent)
 	inst.components.hunger:SetPercent(hunger_percent)
+
+	updatesize(inst)
 end
 
 local function onsave(inst, data)
@@ -306,6 +332,9 @@ local master_postinit = function(inst)
 	inst.soundsname = "slurg"
 	-- Uncomment if "wathgrithr"(Wigfrid) or "webber" voice is used
     inst.talker_path_override = "dontstarve_DLC001/characters/"
+	-- Hunger ticks once a second (hunger.lua UPDATE_PERIOD) and pushes this on
+	-- every change, so it doubles as the size update without its own task.
+	inst:ListenForEvent("hungerdelta", function() updatesize(inst) end)
 	inst.OnSave = onsave 
     inst.OnLoad = onload
 	-- Stats
