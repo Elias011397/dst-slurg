@@ -105,8 +105,9 @@ end
 -- prefixed SLURGDBG so it can be grepped straight out of client_log.txt. Set
 -- SLURG_DEBUG to false, or delete this block and its callers, once the
 -- integration is confirmed working.
-local SLURG_DEBUG = true
+local SLURG_DEBUG = false
 local slurg_logged_items = 0
+local slurg_logged_values = 0
 local function dbg(msg)
 	if SLURG_DEBUG then
 		print("SLURGDBG " .. tostring(msg))
@@ -176,7 +177,8 @@ local function PatchItemInfo()
 				local e = base ~= nil and base.components ~= nil and base.components.edible or nil
 				if e ~= nil then
 					local h, g, sn = player:FoodValuesChanger(inst, e.health, e.hunger, e.sanity)
-					if slurg_logged_items <= 8 then
+					if slurg_logged_values < 8 then
+						slurg_logged_values = slurg_logged_values + 1
 						dbg("slurg values: " .. tostring(inst.prefab) .. " -> "
 							.. tostring(g) .. "/" .. tostring(sn) .. "/" .. tostring(h))
 					end
