@@ -47,65 +47,70 @@ local function onbecamehuman(inst)
 end
 local function onbecameghost(inst)
 	-- Remove speed modifier when becoming a ghost
-   inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "slurg_speed_mod")
+	inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "slurg_speed_mod")
+end
+
+-- Recalculate everything that scales with Slurg's level: size, speed, damage,
+-- max health and max hunger. Health and hunger are put back to the percentage
+-- they were at, so raising the maxes never silently heals or feeds him.
+local function applyupgrades(inst)
+	local healthbonus = .05
+	local damagebonus = .0003
+	local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
+	local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
+
+	local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
+	local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
+	local newdamage = (1.0 + (damagebonus * inst.level))
+	local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
+
+	local health_percent = inst.components.health:GetPercent()
+	local hunger_percent = inst.components.hunger:GetPercent()
+
+	inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
+	inst.components.locomotor.runspeed = newspeed
+	inst.components.combat.damagemultiplier = newdamage
+	inst.components.health.maxhealth = newhealth
+	inst.components.hunger:SetMax(newhunger)
+	inst.components.health:SetPercent(health_percent)
+	inst.components.hunger:SetPercent(hunger_percent)
 end
 
 local function onsave(inst, data)
-    data.level = inst.level
-	data.currenthealth = inst.components.health:GetPercent()
+	data.level = inst.level
+	-- Save fullness as percentages, not raw values. The health and hunger
+	-- components save raw amounts and their own OnLoad runs before ours, while
+	-- the maxes are still the level 0 ones, so those raw values come back
+	-- clamped. The percentages are the only faithful record of how full he was.
+	data.healthpercent = inst.components.health:GetPercent()
+	data.hungerpercent = inst.components.hunger:GetPercent()
 end
 
 -- When loading or spawning the character
 local function onload(inst, data)
-	if data and data.level then
-        inst.level = data.level
-		inst.components.health:SetPercent(data.currenthealth)
-		local healthbonus = .05
-		local damagebonus = .0003
-		local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
-		inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
-		local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
-		local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
-		local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
-		local newdamage = (1.0 + (damagebonus * inst.level))
-		local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
-		local health_percent = inst.components.health:GetPercent()
-		local hunger_percent = inst.components.hunger:GetPercent()
-		inst.components.locomotor.runspeed = newspeed
-		inst.components.combat.damagemultiplier = newdamage
-		inst.components.health.maxhealth = newhealth
-		inst.components.hunger:SetMax(newhunger)
-		inst.components.health:SetPercent(health_percent)
-		inst.components.hunger:SetPercent(hunger_percent)
-	end
-    inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
-    inst:ListenForEvent("ms_becameghost", onbecameghost)
-    if inst:HasTag("playerghost") then
-        onbecameghost(inst)
-    else
-        onbecamehuman(inst)
-    end
-end
+	if data ~= nil and data.level ~= nil then
+		inst.level = data.level
+		-- Raise the maxes to match the restored level before putting his health
+		-- and hunger back, otherwise the percentages apply to the level 0 maxes.
+		applyupgrades(inst)
 
---hunger, health, sanity
-local function applyupgrades(inst)
-		local healthbonus = .05
-		local damagebonus = .0003
-		local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
-		inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
-		local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
-		local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
-		local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
-		local newdamage = (1.0 + (damagebonus * inst.level))
-		local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
-		local health_percent = inst.components.health:GetPercent()
-		local hunger_percent = inst.components.hunger:GetPercent()
-		inst.components.locomotor.runspeed = newspeed
-		inst.components.combat.damagemultiplier = newdamage
-		inst.components.health.maxhealth = newhealth
-		inst.components.hunger:SetMax(newhunger)
-		inst.components.health:SetPercent(health_percent)
-		inst.components.hunger:SetPercent(hunger_percent)
+		-- data.currenthealth was the old name for the health percentage. Keep
+		-- reading it so saves made before this change still restore properly.
+		local healthpercent = data.healthpercent or data.currenthealth
+		if healthpercent ~= nil then
+			inst.components.health:SetPercent(healthpercent)
+		end
+		if data.hungerpercent ~= nil then
+			inst.components.hunger:SetPercent(data.hungerpercent)
+		end
+	end
+	inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
+	inst:ListenForEvent("ms_becameghost", onbecameghost)
+	if inst:HasTag("playerghost") then
+		onbecameghost(inst)
+	else
+		onbecamehuman(inst)
+	end
 end
 
 -- Slurg's own food values, keyed by food prefab name. Omit a stat to leave it at 0.
@@ -298,4 +303,4 @@ local master_postinit = function(inst)
     -- end
 end
 
-return MakePlayerCharacter("slurg", prefabs, assets, common_postinit, master_postinit, prefabs)
+return MakePlayerCharacter("slurg", prefabs, assets, common_postinit, master_postinit)
