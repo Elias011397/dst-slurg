@@ -101,7 +101,36 @@ end
 -- Both versions do leave what we need in globals though, so this needs no file
 -- patching, no require, and no dependency on their script paths. Everything
 -- below is guarded and simply does nothing when neither mod is installed.
--- TEMPORARY diagnostics for the Item Info integration. Everything it prints is
+-- Giving droppings an edible component had a side effect on everyone else: the
+-- composting bin accepts any edible whose food type is not on its reject list
+-- (compostingbin.lua:202), and SLURGROT is not on it. That silently made poop
+-- and guano compostable for every character, and let compost be fed back into
+-- the bin that produces it.
+--
+-- calcmaterialvalue is a field on the bin's component, so wrap it and refuse
+-- our own food type. Returning nil is how the bin already rejects an item.
+AddPrefabPostInit("compostingbin", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+
+	local compostingbin = inst.components.compostingbin
+	if compostingbin == nil or compostingbin.calcmaterialvalue == nil then
+		return
+	end
+
+	local old_calcmaterialvalue = compostingbin.calcmaterialvalue
+	compostingbin.calcmaterialvalue = function(bin, item)
+		if item ~= nil and item.components.edible ~= nil
+			and item.components.edible.foodtype == GLOBAL.FOODTYPE.SLURGROT then
+			return nil
+		end
+		return old_calcmaterialvalue(bin, item)
+	end
+end)
+
+-- TEMPORARY diagnostics for the Item Info integration.
+ Everything it prints is
 -- prefixed SLURGDBG so it can be grepped straight out of client_log.txt. Set
 -- SLURG_DEBUG to false, or delete this block and its callers, once the
 -- integration is confirmed working.
