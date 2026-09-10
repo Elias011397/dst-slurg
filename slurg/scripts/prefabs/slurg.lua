@@ -131,7 +131,7 @@ local food_stat_dict = {
 	spoiled_food = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
 	spoiled_fish = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
 	spoiled_fish_small = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01, levels = 1 },
-	rottenegg = { health = 50, sanity = 10, hunger = 5, hungerpct = 0.05, levels = 5 },
+	rottenegg = { health = 25, sanity = 10, hunger = 5, hungerpct = 0.05, levels = 5 },
 	poop = { health = 0, sanity = 5, hunger = 10, hungerpct = 0.03, levels = 2 },
 	guano = { health = 5, sanity = 5, hunger = 10, hungerpct = 0.04, levels = 2 },
 	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10, levels = 25 },
