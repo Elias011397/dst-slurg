@@ -134,6 +134,7 @@ local food_stat_dict = {
 	rottenegg = { health = 50, sanity = 10, hunger = 5, hungerpct = 0.05 },
 	poop = { health = 0, sanity = 5, hunger = 10, hungerpct = 0.03 },
 	guano = { health = 5, sanity = 5, hunger = 10, hungerpct = 0.04 },
+	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5 },
 	gears = {health = 20, sanity = 20, hunger = 25},
 }
