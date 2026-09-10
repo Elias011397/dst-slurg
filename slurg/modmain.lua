@@ -80,6 +80,45 @@ AddPrefabPostInit("spoiled_food", function(inst)
     -- end
 end)
 
+-- Droppings are not food in vanilla, so Slurg needs an edible component added
+-- to them. A plain edible component would make them food for EVERY character,
+-- so they get their own food type instead: Eater:TestFood only matches an
+-- "edible_<TYPE>" tag on the food against the eater's caneat list, and nothing
+-- but Slurg has SLURGROT in its diet.
+--
+-- This is safe to add globally. IsCookingIngredient works off an explicit
+-- prefab registry rather than the edible component, so these do not become
+-- crockpot ingredients, and SLURGROT is in no FOODGROUP so no creature will
+-- eat them either.
+GLOBAL.FOODTYPE.SLURGROT = "SLURGROT"
+
+local SLURG_GARBAGE_PREFABS = {
+	"poop",
+}
+
+for _, prefabname in ipairs(SLURG_GARBAGE_PREFABS) do
+	AddPrefabPostInit(prefabname, function(inst)
+		-- Clients need this tag too: componentactions.lua decides whether to offer
+		-- the EAT action purely from the edible_<TYPE> and <TYPE>_eater tags.
+		inst:AddTag("edible_" .. GLOBAL.FOODTYPE.SLURGROT)
+
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+
+		if inst.components.edible == nil then
+			inst:AddComponent("edible")
+		end
+		-- Assigning foodtype fires the component's setter, which adds the tag.
+		inst.components.edible.foodtype = GLOBAL.FOODTYPE.SLURGROT
+		-- Slurg's real numbers live in food_stat_dict in prefabs/slurg.lua; these
+		-- are only a fallback, and nobody else can eat these anyway.
+		inst.components.edible.healthvalue = 0
+		inst.components.edible.hungervalue = 0
+		inst.components.edible.sanityvalue = 0
+	end)
+end
+
 -- The skins shown in the cycle view window on the character select screen.
 -- A good place to see what you can put in here is in skinutils.lua, in the function GetSkinModes
 local skin_modes = {

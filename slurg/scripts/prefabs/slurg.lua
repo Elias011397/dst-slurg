@@ -132,6 +132,7 @@ local food_stat_dict = {
 	spoiled_fish = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
 	spoiled_fish_small = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
 	rottenegg = { health = 50, sanity = 10, hunger = 5, hungerpct = 0.05 },
+	poop = { health = 0, sanity = 5, hunger = 10, hungerpct = 0.03 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5 },
 	gears = {health = 20, sanity = 20, hunger = 25},
 }
@@ -199,6 +200,9 @@ local master_postinit = function(inst)
 		inst.components.eater:SetCanEatHorrible()
 		inst.components.eater:SetCanEatGears()
 		inst.components.eater:SetCanEatRaw()
+		-- droppings, made edible for Slurg alone in modmain.lua
+		table.insert(inst.components.eater.caneat, FOODTYPE.SLURGROT)
+		inst:AddTag(FOODTYPE.SLURGROT .. "_eater")
         inst.components.eater:SetOnEatFn(oneat)
     end
 	-- applyupgrades(inst)
