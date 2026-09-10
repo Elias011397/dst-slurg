@@ -11,6 +11,13 @@ TUNING.SLURG_HEALTH = 50
 TUNING.SLURG_HUNGER = 150
 TUNING.SLURG_SANITY = 150
 
+-- leveling: eating spoiled food raises inst.level from 0 up to SLURG_MAX_LEVEL
+TUNING.SLURG_MAX_LEVEL = 5000
+-- run speed scales linearly from MIN at level 0 to MAX at SLURG_MAX_LEVEL.
+-- for reference, TUNING.WILSON_RUN_SPEED is 6.
+TUNING.SLURG_SPEED_MIN = 4.0
+TUNING.SLURG_SPEED_MAX = 6.0
+
 -- char starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.SLURG = {
 	--"spoiled_food",
@@ -42,12 +49,12 @@ local function onload(inst, data)
 	if data and data.level then
         inst.level = data.level
 		inst.components.health:SetPercent(data.currenthealth)
-		local runspeed_bonus = .0002
 		local healthbonus = .05
 		local damagebonus = .0003
 		local hungerbonus = .07
 		inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
-		local newspeed = ((TUNING.WILSON_RUN_SPEED + (TUNING.WILSON_RUN_SPEED * runspeed_bonus * inst.level))/(1.5 + (inst.level * 0.0003)))
+		local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
+		local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
 		local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
 		local newdamage = (1.0 + (damagebonus * inst.level))
 		local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
@@ -71,12 +78,12 @@ end
 
 --hunger, health, sanity
 local function applyupgrades(inst)
-		local runspeed_bonus = .0002
 		local healthbonus = .05
 		local damagebonus = .0003
 		local hungerbonus = .07
 		inst:ApplyScale("sizecorrection", (1.5 + (inst.level * 0.0003)))
-		local newspeed = ((TUNING.WILSON_RUN_SPEED + (TUNING.WILSON_RUN_SPEED * runspeed_bonus * inst.level))/(1.5 + (inst.level * 0.0003)))
+		local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
+		local newspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
 		local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
 		local newdamage = (1.0 + (damagebonus * inst.level))
 		local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
@@ -92,7 +99,7 @@ end
 
 local function oneat(inst, food)
 	if food and food.components.edible and food:HasTag("spoiled_food") then
-		if inst.level < 5000 then
+		if inst.level < TUNING.SLURG_MAX_LEVEL then
 			inst.level = inst.level + 1
 			inst.SoundEmitter:PlaySound("dontstarve/characters/slurg/slurg_LU")
 		end	
