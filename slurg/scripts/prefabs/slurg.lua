@@ -118,17 +118,23 @@ local function oneat(inst, food)
 	end
 end
 
--- food_values is a dictionary with food prefab names as keys and stat-dictionaries as values.
--- The stat-dictionaries have stat-names as keys and the effect on each stat as values.
--- If you want a stat not to be affected, you can just omit it from the stat-dictionary.
+-- Slurg's own food values, keyed by food prefab name. Omit a stat to leave it at 0.
+--
+-- health and sanity are flat amounts. hunger is flat PLUS hungerpct of Slurg's
+-- current max hunger, so garbage keeps up as his belly grows with level:
+--
+--     hunger restored = hunger + (hungerpct * max hunger)
+--
+-- Plain rot at hunger 1 / hungerpct 0.01 gives 2 at level 0 (max 100) and 11
+-- at the level cap (max 1000).
 local food_stat_dict = {
-	spoiled_food = { health = 3, sanity = 1, hunger = 1 },
+	spoiled_food = { health = 3, sanity = 1, hunger = 1, hungerpct = 0.01 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5 },
 	gears = {health = 20, sanity = 20, hunger = 25},
 }
 
 -- This is the ONLY function you should be making changes to.
-local function calculateFoodValues(food)
+local function calculateFoodValues(food, eater)
 	-- We want the caller of this function to be told whether our code made changes to the food.
 	-- Therefore, we also send back a bool, called changesweremade, which we set to true if we change anything.
 	-- In this case it's very simple. If we find the food in our food_stats, we will make changes to it.
@@ -156,6 +162,12 @@ local function calculateFoodValues(food)
 		healthval = food_stats["health"] or 0
 		hungerval = food_stats["hunger"] or 0
 		sanityval = food_stats["sanity"] or 0
+
+		-- scale the hunger value with how big the eater's belly has grown
+		local hungerpct = food_stats["hungerpct"]
+		if hungerpct ~= nil and eater ~= nil and eater.components.hunger ~= nil then
+			hungerval = hungerval + (hungerpct * eater.components.hunger.max)
+		end
 	end
 	---------- ONLY EDIT ABOVE THIS LINE ----------
 	
@@ -218,7 +230,7 @@ local master_postinit = function(inst)
             local healthval, hungerval, sanityval
             
             -- Calculate the food values, and let us know if changes were made to them.
-            changesweremade, healthval, hungerval, sanityval = calculateFoodValues(food)
+            changesweremade, healthval, hungerval, sanityval = calculateFoodValues(food, self.inst)
             
             if changesweremade then
                 -- We first save the original food values, since we want to reset them after changing them temporarily for our character.
