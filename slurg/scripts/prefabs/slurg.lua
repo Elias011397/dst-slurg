@@ -150,8 +150,33 @@ local food_stat_dict = {
 	guano = { health = 5, sanity = 5, hunger = 10, hungerpct = 0.04, levels = 2 },
 	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10, levels = 25 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5 },
-	gears = {health = 20, sanity = 20, hunger = 25},
+	-- half of the values this mod used to give (20 / 20 / 25)
+	gears = { health = 10, sanity = 10, hunger = 12.5 },
 }
+
+-- Food Slurg digests poorly. Unlike food_stat_dict these do not replace the
+-- food's values, they scale the food's own values by the given fraction, so
+-- they keep working if Klei retunes a food and they cover foods added by other
+-- mods. Matched by tag, first match wins.
+--
+-- Values are not rounded: half of 18.75 hunger stays 9.375.
+--
+-- Note that negative values still get dropped entirely for monster food,
+-- because eater.lua:243 and :266 skip negative health and sanity when
+-- strongstomach is set. So halving monster meat only really halves its hunger.
+local food_multipliers = {
+	{ tag = "rawmeat", multiplier = 0.5 },
+	{ tag = "monstermeat", multiplier = 0.5 },
+}
+
+local function GetFoodMultiplier(food)
+	for _, v in ipairs(food_multipliers) do
+		if food:HasTag(v.tag) then
+			return v.multiplier
+		end
+	end
+	return nil
+end
 
 -- Eating Slurg food raises his level by that food's levels value.
 local function oneat(inst, food)
@@ -205,6 +230,15 @@ local function calculateFoodValues(food, eater)
 		local hungerpct = food_stats["hungerpct"]
 		if hungerpct ~= nil and eater ~= nil and eater.components.hunger ~= nil then
 			hungerval = hungerval + (hungerpct * eater.components.hunger.max)
+		end
+	else
+		-- No exact entry, so fall back to the category multipliers.
+		local multiplier = GetFoodMultiplier(food)
+		if multiplier ~= nil and food.components.edible ~= nil then
+			changesweremade = true
+			healthval = food.components.edible.healthvalue * multiplier
+			hungerval = food.components.edible.hungervalue * multiplier
+			sanityval = food.components.edible.sanityvalue * multiplier
 		end
 	end
 	---------- ONLY EDIT ABOVE THIS LINE ----------
