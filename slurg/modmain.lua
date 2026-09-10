@@ -90,46 +90,57 @@ for _, prefabname in ipairs(SLURG_GARBAGE_PREFABS) do
 	end)
 end
 
--- Item Info Updated shows food values client side, reading them from its own
--- per-prefab cache. It has no hook for other mods: each character it supports
--- is written into GetEdibleValues by name (wortox, wormwood, wurt, wathgrithr),
--- so Slurg's numbers never appeared. Patch that method to ask Slurg instead.
+-- Item Info, and its "Item Info Updated" fork, show food values client side.
+-- Neither has an extension hook, and neither can be made to work from inside
+-- this mod alone: they render from their own cache of the prefab's raw edible
+-- values, while Slurg's numbers are worked out per eater at the moment he eats
+-- and never live on the item. Writing them onto the item is only safe on a
+-- remote client, where food has no edible component and nothing else reads it;
+-- on a host it would change the values for everyone on the server.
 --
--- Its cache holds the vanilla values, and on a client the item itself has no
--- edible component, so the cached numbers are passed in as the base to work
--- from. Tags do replicate, so the rawmeat, monstermeat and mushroom rules
--- still resolve correctly here.
---
--- Deferred to AddSimPostInit because AddClassPostConstruct and require resolve
--- immediately, and Item Info's script path only exists once it has loaded. The
--- whole thing is guarded so the mod is unaffected when Item Info is absent.
+-- Both versions do leave what we need in globals though, so this needs no file
+-- patching, no require, and no dependency on their script paths. Everything
+-- below is guarded and simply does nothing when neither mod is installed.
 local function PatchItemInfo()
-	local ok, ItemInfoDesc = pcall(GLOBAL.require, "widgets/iteminfo_desc")
-	if not ok or type(ItemInfoDesc) ~= "table" or ItemInfoDesc.GetEdibleValues == nil then
-		return
+	-- Character traits. Both versions read these plain globals, so registering
+	-- Slurg here stops them applying spoilage and monster meat penalties he does
+	-- not actually take.
+	if GLOBAL.StrongStomachEaters ~= nil then
+		GLOBAL.StrongStomachEaters.slurg = true
 	end
-	if ItemInfoDesc.slurg_patched then
-		return
+	if GLOBAL.IgnoreSpoilageEaters ~= nil then
+		GLOBAL.IgnoreSpoilageEaters.slurg = true
 	end
-	ItemInfoDesc.slurg_patched = true
 
-	local old_GetEdibleValues = ItemInfoDesc.GetEdibleValues
-	ItemInfoDesc.GetEdibleValues = function(self, base_inst, inst)
-		local hunger, sanity, health = old_GetEdibleValues(self, base_inst, inst)
+	-- Custom values. The current version routes every lookup through a global
+	-- InfoFetcher singleton, which is the safest thing to wrap.
+	local fetcher = GLOBAL.MOD_ITEMINFO ~= nil and GLOBAL.MOD_ITEMINFO.INFO_FETCHER or nil
+	if fetcher ~= nil and fetcher.GetEdibleValues ~= nil and not fetcher.slurg_patched then
+		fetcher.slurg_patched = true
 
-		local player = GLOBAL.ThePlayer
-		if player ~= nil and player.prefab == "slurg" and player.FoodValuesChanger ~= nil
-			and inst ~= nil and base_inst ~= nil and base_inst.components.edible ~= nil then
+		local old_GetEdibleValues = fetcher.GetEdibleValues
+		fetcher.GetEdibleValues = function(self, inst)
+			local hunger, sanity, health = old_GetEdibleValues(self, inst)
 
-			local e = base_inst.components.edible
-			local h, g, sn = player:FoodValuesChanger(inst, e.health, e.hunger, e.sanity)
-			if sn ~= nil then
-				-- this function returns hunger, sanity, health, in that order
-				return g, sn, h
+			local player = GLOBAL.ThePlayer
+			if player ~= nil and player.prefab == "slurg"
+				and player.FoodValuesChanger ~= nil and inst ~= nil then
+
+				-- Their cache holds the vanilla numbers. Pass them in as the base,
+				-- because on a client the item has no edible component of its own.
+				local base = self.cached_items ~= nil and self.cached_items[inst.prefab] or nil
+				local e = base ~= nil and base.components ~= nil and base.components.edible or nil
+				if e ~= nil then
+					local h, g, sn = player:FoodValuesChanger(inst, e.health, e.hunger, e.sanity)
+					if sn ~= nil then
+						-- returns hunger, sanity, health, in that order
+						return g, sn, h
+					end
+				end
 			end
-		end
 
-		return hunger, sanity, health
+			return hunger, sanity, health
+		end
 	end
 end
 
