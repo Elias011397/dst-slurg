@@ -35,7 +35,7 @@ TUNING.SLURG_SIZE_HUNGER_MAX = 0.90 -- at or above this he is at his cap
 -- max hunger scales from SLURG_HUNGER at level 0 to this at SLURG_MAX_LEVEL
 TUNING.SLURG_HUNGER_MAX = 1000
 -- mushrooms restore this share of his stomach on top of their own hunger
-TUNING.SLURG_MUSHROOM_HUNGER_PCT = 0.05
+TUNING.SLURG_MUSHROOM_HUNGER_PCT = 0.02
 
 -- passive health regen, see components/healthregen.lua
 TUNING.SLURG_REGEN_TICK = 1            -- seconds between regen ticks
