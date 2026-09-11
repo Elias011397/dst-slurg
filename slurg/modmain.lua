@@ -38,7 +38,7 @@ local STRINGS = GLOBAL.STRINGS
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.slurg = "Slurg the Slime"
 STRINGS.CHARACTER_NAMES.slurg = "slurg"
-STRINGS.CHARACTER_DESCRIPTIONS.slurg = "*Iron Gut\n*High Potential\n*Craves frequent food"
+STRINGS.CHARACTER_DESCRIPTIONS.slurg = "*Slime Stomach\n*High Potential\n*Craves frequent food"
 STRINGS.CHARACTER_QUOTES.slurg = "\"A wild Slurg has appeared\""
 STRINGS.CHARACTER_SURVIVABILITY.slurg = "Slimey"
 

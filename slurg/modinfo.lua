@@ -11,6 +11,7 @@ and speed. Richer garbage is worth far more:
 
   Rot, Spoiled Fish ....... +1    constant, everywhere
   Poop, Guano ............. +2    beefalo, pigs, caves
+  Wet Goop ................ +3    any failed crock pot dish
   Compost ................. +5    needs a Composting Bin
   Rotten Egg .............. +10   birdcage farming
   Glommer's Goop .......... +25   one per full moon
@@ -20,7 +21,7 @@ triple size.
 
 HE EATS WHAT NOBODY ELSE WILL
   - Poop, Guano and Compost become food, for Slurg alone.
-  - Iron gut. Spoiled food loses nothing, monster meat costs him nothing.
+  - Slime stomach. Spoiled food loses nothing, monster meat costs him nothing.
   - No food in the game can drain his health, hunger or sanity.
   - Raw meat, monster food and gears feed him at half value. He wants
     garbage, not groceries.

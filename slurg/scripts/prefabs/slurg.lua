@@ -186,7 +186,7 @@ local food_stat_dict = {
 	guano = { health = 5, sanity = 5, hunger = 10, hungerpct = 0.04, levels = 2 },
 	compost = { health = 15, sanity = 15, hunger = 15, hungerpct = 0.06, levels = 5 },
 	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10, levels = 25 },
-	wetgoop = { health = 5, sanity = 5, hunger = 5 },
+	wetgoop = { health = 5, sanity = 5, hunger = 5, levels = 3 },
 	-- half of the values this mod used to give (20 / 20 / 25)
 	gears = { health = 10, sanity = 10, hunger = 12.5 },
 }

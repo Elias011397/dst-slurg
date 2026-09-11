@@ -15,6 +15,7 @@ cap of 5000.
 [tr][td]Spoiled Fish[/td][td]+3[/td][td]1 + 1%[/td][td]+1[/td][td]+1[/td][/tr]
 [tr][td]Poop[/td][td]+4[/td][td]10 + 3%[/td][td]+5[/td][td]+2[/td][/tr]
 [tr][td]Guano[/td][td]+5[/td][td]10 + 4%[/td][td]+5[/td][td]+2[/td][/tr]
+[tr][td]Wet Goop[/td][td]+5[/td][td]5[/td][td]+5[/td][td]+3[/td][/tr]
 [tr][td]Compost[/td][td]+15[/td][td]15 + 6%[/td][td]+15[/td][td]+5[/td][/tr]
 [tr][td]Rotten Egg[/td][td]+25[/td][td]5 + 5%[/td][td]+10[/td][td]+10[/td][/tr]
 [tr][td]Glommer's Goop[/td][td]+50[/td][td]20 + 10%[/td][td]+50[/td][td]+25[/td][/tr]
@@ -22,7 +23,7 @@ cap of 5000.
 
 [b]The % is a share of his stomach[/b], so the same garbage feeds him more as he
 grows. Rot is 1 + 1%: worth [b]2 hunger[/b] on a 100 stomach, and [b]11[/b] on a
-1000 one.
+1000 one. Wet Goop is the one flat value, always 5.
 
 Normally every one of these is either harmful or inedible. [b]Poop, Guano and
 Compost are food for Slurg alone[/b] and no other character can eat them.
@@ -61,7 +62,7 @@ An empty belly drops him to the [b]same floor at every level[/b], a quarter belo
 his usual pace, however much he has eaten in his life.
 
 [hr][/hr]
-[h2]Iron gut[/h2]
+[h2]Slime stomach[/h2]
 
 [b]Nothing in the game can drain his health, hunger or sanity.[/b] Spoiled food
 loses none of its value to him, and monster meat costs him nothing.
@@ -71,13 +72,12 @@ loses none of its value to him, and monster meat costs him nothing.
 [tr][td]Raw meat[/td][td]full value[/td][td]half value[/td][/tr]
 [tr][td]Monster food[/td][td]full value[/td][td]half value[/td][/tr]
 [tr][td]Gears[/td][td]+60 / 75 / +50[/td][td]+10 / 12.5 / +10[/td][/tr]
-[tr][td]Wet Goop[/td][td]nothing[/td][td]+5 / +5 / +5[/td][/tr]
 [tr][td]Mushrooms[/td][td]costs health[/td][td]costs sanity instead[/td][/tr]
 [tr][td]Everything else[/td][td]penalties apply[/td][td]no penalties at all[/td][/tr]
 [/table]
 
-Mushrooms are the one exception to the iron gut. Their toxicity still bites, but
-it lands on his mind rather than his body.
+Mushrooms are the one exception. Their toxicity still bites, but it lands on
+his mind rather than his body.
 
 [hr][/hr]
 [h2]Slime regeneration[/h2]
