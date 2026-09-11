@@ -45,9 +45,16 @@ up he reaches triple size and double speed at the cap. All that progress is
 only worth something if you keep him fed.
 
 SLIME REGENERATION
-He slowly heals himself, but only while well fed. Below half a stomach it
-stops entirely. The fuller he is the faster it runs, and it speeds up as he
-levels.
+He heals himself, but only while fed. Below half a stomach it stops entirely.
+Above that it speeds up smoothly the fuller he is, and again the further he
+has levelled. Seconds per hit point:
+
+  belly          level 0    level 2500   level 5000
+   50% .......... 120 .......... 80 .......... 60
+   70% ........... 70 .......... 47 .......... 35
+   90% ........... 20 .......... 13 .......... 10
+
+Every hunger point and every level counts, not just these.
 
 THE CATCH
   - Fragile start. 50 health and a tiny stomach.
