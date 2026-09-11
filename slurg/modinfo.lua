@@ -5,8 +5,9 @@ A scavenger who turns the world's garbage into growth. Slurg starts small,
 frail and slow, then eats his way into becoming the biggest thing on the map.
 
 EAT GARBAGE, GROW
-Every piece of filth he swallows raises his Level, permanently increasing his
-health, stomach, damage and size. Richer garbage is worth far more:
+Eating any type of rotted food or excrement will raise his Level, permanently
+increasing his health, stomach and damage, and raising the cap on his size
+and speed. Richer garbage is worth far more:
 
   Rot, Spoiled Fish ....... +1    constant, everywhere
   Poop, Guano ............. +2    beefalo, pigs, caves
