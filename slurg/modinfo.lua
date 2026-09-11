@@ -6,37 +6,66 @@ frail and slow, then eats his way into becoming the biggest thing on the map.
 
 EAT GARBAGE, GROW
 Every piece of filth he swallows raises his Level, permanently increasing his
-health, stomach, damage and size. Richer garbage is worth far more:
+health, stomach, damage and size. The cap is Level 5000.
 
-  Rot, Spoiled Fish ....... +1    constant, everywhere
-  Poop, Guano ............. +2    beefalo, pigs, caves
-  Compost ................. +5    needs a Composting Bin
-  Rotten Egg .............. +10   birdcage farming
-  Glommer's Goop .......... +25   one per full moon
+  Rot, Spoiled Fish ....... +1 level    constant, everywhere
+  Poop, Guano ............. +2 levels   beefalo, pigs, caves
+  Compost ................. +5 levels   needs a Composting Bin
+  Rotten Egg .............. +10 levels  birdcage farming
+  Glommer's Goop .......... +25 levels  one per full moon
 
-At the level cap he reaches 300 health, a 1000 stomach, 2.5x damage and
-triple size.
 
-HE EATS WHAT NOBODY ELSE WILL
-  - Poop, Guano and Compost become food, for Slurg alone.
-  - Iron gut. Spoiled food loses nothing, monster meat costs him nothing.
-  - No food in the game can drain his health, hunger or sanity.
-  - Raw meat, monster food and gears feed him at half value. He wants
-    garbage, not groceries.
+AS HE LEVELS                  level 0  ->  max level
 
-Mushrooms are the exception. Their toxicity still bites, but it hits his mind
-instead of his body: a mushroom's health damage becomes sanity loss.
+  Health .................... 50       ->  300
+  Stomach ................... 100      ->  1000
+  Sanity .................... 150      ->  150
+  Damage .................... 1x       ->  2.5x
+  Size ...................... 1.5x     ->  3x
+  Speed, full belly ......... 1.33x    ->  2x
+  Speed, empty belly ........ 0.67x    ->  0.67x
+
+
+FOOD VALUES                   health / hunger / sanity
+
+  Rot .............. -1 / -10 / 0    ->  +3 / 2-11 / +1      (Slurg)
+  Spoiled Fish ..... -1 / -10 / 0    ->  +3 / 2-11 / +1      (Slurg)
+  Rotten Egg ....... -1 / -10 / 0    ->  +25 / 10-55 / +10   (Slurg)
+  Poop ............. inedible        ->  +4 / 13-40 / +5     (Slurg)
+  Guano ............ inedible        ->  +5 / 14-50 / +5     (Slurg)
+  Compost .......... inedible        ->  +15 / 21-75 / +15   (Slurg)
+  Glommer's Goop ... +40 / 9 / -50   ->  +50 / 30-120 / +50  (Slurg)
+  Wet Goop ......... 0 / 0 / 0       ->  +5 / +5 / +5        (Slurg)
+  Gears ............ +60 / 75 / +50  ->  +10 / 12.5 / +10    (Slurg)
+
+  Raw meat ......... full value      ->  half value          (Slurg)
+  Monster food ..... full value      ->  half value          (Slurg)
+  Mushrooms ........ hurts health    ->  costs sanity        (Slurg)
+  Everything else .. penalties       ->  no penalties        (Slurg)
+
+Hunger ranges grow with level, since garbage fills a share of his stomach.
+Poop, Guano and Compost are food for Slurg alone; nobody else can touch them.
+
+
+IRON GUT
+Spoiled food loses nothing. Monster meat costs him nothing. No food in the
+game can drain his health, hunger or sanity.
+
+Mushrooms are the one exception. Their toxicity still bites, but it hits his
+mind instead of his body: a mushroom's health damage becomes sanity loss.
+
 
 A FULL SLURG IS A FAST SLURG
 He swells as he fills up and shrinks as he empties, and his size carries his
 speed with it. An empty Slurg crawls no matter how much he has eaten in his
-life; a full one at max level moves at twice normal speed. All that progress
-is only worth something if you keep him fed.
+life. All that progress is only worth something if you keep him fed.
+
 
 SLIME REGENERATION
 He slowly heals himself, but only while well fed. Below half a stomach it
 stops entirely. The fuller he is the faster it runs, and it speeds up as he
 levels.
+
 
 THE CATCH
   - Fragile start. 50 health and a tiny stomach.
