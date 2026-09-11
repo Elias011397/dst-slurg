@@ -12,7 +12,7 @@ and slow, then eats his way into becoming the biggest thing on the map.
 [*][b]Rot is a meal.[/b] Spoiled food loses none of its value to him.
 [*][b]Monster food and raw meat are free.[/b] Neither carries a penalty.
 [*][b]Filth is food.[/b] Poop, Guano and Compost are edible for Slurg alone.
-[*][b]Fungus fills him.[/b] Every mushroom restores an extra 10% of his stomach.
+[*][b]Fungus fills him.[/b] Every mushroom restores an extra 5% of his stomach.
 [*][b]Garbage makes him grow.[/b] Rotted food and excrement raise his Level.
 [/list]
 
@@ -22,9 +22,9 @@ and slow, then eats his way into becoming the biggest thing on the map.
 [tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 18.75 / 0[/td][/tr]
 [tr][td]Raw Meat[/td][td]+1 / 25 / -10[/td][td]+1 / 25 / 0[/td][/tr]
 [tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -8[/td][/tr]
-[tr][td]Red Cap[/td][td]-20 / 12.5 / 0[/td][td]0 / 22.5 to 112.5 / -20[/td][/tr]
-[tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 22.5 to 112.5 / -50[/td][/tr]
-[tr][td]Cooked Blue Cap[/td][td]-3 / 0 / +10[/td][td]0 / 10 to 100 / +7[/td][/tr]
+[tr][td]Red Cap[/td][td]-20 / 12.5 / 0[/td][td]0 / 17.5 to 62.5 / -20[/td][/tr]
+[tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 17.5 to 62.5 / -50[/td][/tr]
+[tr][td]Cooked Blue Cap[/td][td]-3 / 0 / +10[/td][td]0 / 5 to 50 / +7[/td][/tr]
 [tr][td]Carrot[/td][td]+1 / 12.5 / 0[/td][td]+1 / 12.5 / 0[/td][/tr]
 [/table]
 
@@ -38,8 +38,8 @@ normally takes 20 health and no sanity at all, so for Slurg it takes [b]20
 sanity[/b] and nothing else. A raw Green Cap keeps its full -50. He is immune to
 almost everything, and then walks into a mushroom.
 
-They do fill him, though. [b]Every mushroom restores an extra 10% of his
-stomach[/b] on top of its own hunger, which is 10 at level 0 and 100 at the cap.
+They do fill him, though. [b]Every mushroom restores an extra 5% of his
+stomach[/b] on top of its own hunger, which is 5 at level 0 and 50 at the cap.
 Even a cooked cap, worth nothing to anyone else, becomes a real meal. Fungus is
 food and poison at once.
 
