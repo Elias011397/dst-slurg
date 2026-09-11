@@ -22,12 +22,13 @@ triple size.
 HE EATS WHAT NOBODY ELSE WILL
   - Poop, Guano and Compost become food, for Slurg alone.
   - Slime stomach. Spoiled food loses nothing, monster meat costs him nothing.
-  - No food in the game can drain his health, hunger or sanity.
+  - No food can ever cost him health.
   - Raw meat, monster food and gears feed him at half value. He wants
     garbage, not groceries.
 
-Mushrooms are the exception. Their toxicity still bites, but it hits his mind
-instead of his body: a mushroom's health damage becomes sanity loss.
+Anything that would normally hurt him costs him sanity instead. The health
+damage is added to whatever sanity the food already took, so a rotten mushroom
+leaves his body untouched and his mind worse off.
 
 A FULL SLURG IS A FAST SLURG
 He swells as he fills up and shrinks as he empties, and his size carries his

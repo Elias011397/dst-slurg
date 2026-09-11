@@ -215,22 +215,6 @@ local function GetFoodMultiplier(food)
 	return nil
 end
 
--- Mushrooms are the exception to Slurg taking no penalties, so they need to be
--- identified exactly. The mushroom tag alone is not enough: mushrooms.lua only
--- tags the raw caps (capcommonfn), not the cooked ones, and two of the three
--- mushrooms that carry a health penalty are cooked. Match known prefabs too,
--- and keep the tag check so mushrooms added by other mods are still covered.
-local mushroom_prefabs = {
-	red_cap = true,   red_cap_cooked = true,
-	green_cap = true, green_cap_cooked = true,
-	blue_cap = true,  blue_cap_cooked = true,
-	moon_cap = true,  moon_cap_cooked = true,
-}
-
-local function IsMushroom(food)
-	return food:HasTag("mushroom") or mushroom_prefabs[food.prefab] == true
-end
-
 -- Eating Slurg food raises his level by that food's levels value.
 local function oneat(inst, food)
 	if food == nil or food.components.edible == nil then
@@ -254,9 +238,8 @@ end
 --
 --   1. a named entry in food_stat_dict replaces the values outright
 --   2. otherwise a category multiplier scales the food's own values
---   3. mushrooms carry any health penalty over into sanity instead of taking it
---      as damage, and keep their remaining penalties
---   4. everything else loses its penalties entirely
+--   3. any health penalty left over is carried into sanity instead, so Slurg
+--      never takes damage from eating, but can lose more sanity for it
 -- basehealth, basehunger and basesanity are optional. Display mods run client
 -- side, where food has no edible component at all, so they pass the vanilla
 -- numbers in from their own cache instead.
@@ -298,19 +281,13 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 		end
 	end
 
-	if IsMushroom(food) then
-		-- Mushrooms are an exception and keep their penalties. A health penalty is
-		-- carried over into sanity additively rather than being taken as damage, so
-		-- a mushroom that already costs sanity ends up costing more of it.
-		if healthval < 0 then
-			sanityval = sanityval + healthval
-			healthval = 0
-		end
-	else
-		-- Slurg takes no stat losses from anything that is not a mushroom.
-		healthval = math.max(healthval, 0)
-		hungerval = math.max(hungerval, 0)
-		sanityval = math.max(sanityval, 0)
+	-- Slurg never loses health to food. A health penalty is carried over into
+	-- sanity additively instead, so a food that already costs sanity ends up
+	-- costing more of it. Everything else stands as it is, including negative
+	-- hunger and sanity.
+	if healthval < 0 then
+		sanityval = sanityval + healthval
+		healthval = 0
 	end
 
 	return true, healthval, hungerval, sanityval

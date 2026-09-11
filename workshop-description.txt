@@ -64,20 +64,28 @@ his usual pace, however much he has eaten in his life.
 [hr][/hr]
 [h2]Slime stomach[/h2]
 
-[b]Nothing in the game can drain his health, hunger or sanity.[/b] Spoiled food
-loses none of its value to him, and monster meat costs him nothing.
+[b]No food can ever cost him health.[/b] Anything that would normally hurt him
+takes the damage out of his [b]sanity[/b] instead, added to whatever sanity the
+food already cost. Spoiled food loses none of its value to him, and monster meat
+costs him nothing at all.
+
+[table]
+[tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
+[tr][td]Durian[/td][td]-3 hp, -5 sanity[/td][td]0 hp, -8 sanity[/td][/tr]
+[tr][td]Red Cap[/td][td]-20 hp, no sanity[/td][td]0 hp, -20 sanity[/td][/tr]
+[tr][td]Cooked Blue Cap[/td][td]-3 hp, +10 sanity[/td][td]0 hp, +7 sanity[/td][/tr]
+[tr][td]Monster Meat[/td][td]-20 hp, -15 sanity[/td][td]costs nothing[/td][/tr]
+[/table]
+
+He still feels it, just somewhere else. A food that already drained sanity drains
+more of it, and one that restored sanity restores less.
 
 [table]
 [tr][th]Category[/th][th]Normally[/th][th]For Slurg[/th][/tr]
 [tr][td]Raw meat[/td][td]full value[/td][td]half value[/td][/tr]
 [tr][td]Monster food[/td][td]full value[/td][td]half value[/td][/tr]
 [tr][td]Gears[/td][td]+60 / 75 / +50[/td][td]+10 / 12.5 / +10[/td][/tr]
-[tr][td]Mushrooms[/td][td]costs health[/td][td]costs sanity instead[/td][/tr]
-[tr][td]Everything else[/td][td]penalties apply[/td][td]no penalties at all[/td][/tr]
 [/table]
-
-Mushrooms are the one exception. Their toxicity still bites, but it lands on
-his mind rather than his body.
 
 [hr][/hr]
 [h2]Slime regeneration[/h2]
@@ -100,6 +108,7 @@ A fresh Slurg heals at half these rates, a capped one at full.
 [*][b]Fragile start.[/b] 50 health and a 100 stomach.
 [*][b]Always hungry.[/b] He burns food 35% faster than anyone else.
 [*][b]Feast or famine.[/b] Empty means small, slow, and no healing.
+[*][b]It goes to his head.[/b] Harmful food spares his body and takes his mind.
 [/list]
 
 [hr][/hr]
