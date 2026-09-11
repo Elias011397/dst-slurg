@@ -64,24 +64,28 @@ his usual pace, however much he has eaten in his life.
 [hr][/hr]
 [h2]Slime stomach[/h2]
 
-[b]Food cannot drain his health, hunger or sanity[/b], with one exception:
-anything that would normally hurt him takes that damage out of his [b]sanity[/b]
-instead. It is the only way eating can cost him anything at all.
+[b]Food can never cost him health or hunger.[/b] Anything that would normally
+hurt him has that damage [b]added onto the food's sanity cost[/b] instead, so a
+food that already drained sanity drains that much more of it. Sanity is the only
+meter eating can still touch.
 
 [table]
 [tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
+[tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -8[/td][/tr]
 [tr][td]Red Cap[/td][td]-20 / 12.5 / 0[/td][td]0 / 12.5 / -20[/td][/tr]
-[tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -3[/td][/tr]
+[tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 12.5 / -50[/td][/tr]
 [tr][td]Cooked Blue Cap[/td][td]-3 / 0 / +10[/td][td]0 / 0 / +7[/td][/tr]
-[tr][td]Cooked Red Cap[/td][td]+1 / 0 / -10[/td][td]+1 / 0 / 0[/td][/tr]
-[tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 12.5 / 0[/td][/tr]
+[tr][td]Cooked Green Cap[/td][td]-1 / 0 / +15[/td][td]0 / 0 / +14[/td][/tr]
+[tr][td]Cooked Moon Cap[/td][td]0 / -12.5 / -10[/td][td]0 / 0 / -10[/td][/tr]
 [tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 9.375 / 0[/td][/tr]
 [/table]
 
-Only the health damage carries across. A food's own sanity drain is wiped like
-everything else, so the sanity he loses is always exactly the harm that would
-have hit his body. Monster food is the exception twice over: his stomach throws
-out its penalties before the shift can reach them, so it costs him nothing.
+Durian is the clearest case: its own -5 sanity plus the -3 that would have hit
+his health comes to [b]-8[/b]. A food that restored sanity restores less instead,
+so a Cooked Blue Cap gives +7 rather than +10.
+
+Monster food is the one thing untouched. His stomach throws out its penalties
+before the shift can reach them, leaving 0 / 9.375 / 0.
 
 Raw meat, monster food and gears are all halved. He wants garbage, not groceries.
 

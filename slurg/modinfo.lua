@@ -26,9 +26,10 @@ HE EATS WHAT NOBODY ELSE WILL
   - Raw meat, monster food and gears feed him at half value. He wants
     garbage, not groceries.
 
-Food cannot drain his hunger or sanity either, with one exception: anything
-that would normally hurt him takes that damage out of his sanity instead. It
-is the only way eating can cost him anything at all.
+Food cannot drain his hunger either. Anything that would normally hurt him
+adds that damage onto the food's sanity cost instead, so a food that already
+drained sanity drains that much more. Sanity is the only meter eating can
+still cost him.
 
 A FULL SLURG IS A FAST SLURG
 He swells as he fills up and shrinks as he empties, and his size carries his

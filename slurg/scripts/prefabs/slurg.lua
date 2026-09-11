@@ -238,8 +238,8 @@ end
 --
 --   1. a named entry in food_stat_dict replaces the values outright
 --   2. otherwise a category multiplier scales the food's own values
---   3. hunger and sanity penalties are cleared, then any health penalty is
---      moved into sanity, which is the only way food can cost him anything
+--   3. hunger penalties are cleared, and any health penalty is added onto the
+--      food's sanity, which is the only meter eating can still cost him
 -- basehealth, basehunger and basesanity are optional. Display mods run client
 -- side, where food has no edible component at all, so they pass the vanilla
 -- numbers in from their own cache instead.
@@ -281,15 +281,15 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 		end
 	end
 
-	-- Slurg takes no penalties from food, with one exception: a health penalty is
-	-- moved into sanity rather than wiped, so harmful food costs him his mind
-	-- instead of his body.
+	-- Slurg never loses health or hunger to food. A health penalty is added to
+	-- the food's sanity value instead, so harmful food costs him his mind rather
+	-- than his body.
 	--
-	-- Order matters. The food's own hunger and sanity penalties are cleared
-	-- first, so the only sanity he can ever lose is what the health damage put
-	-- there. Clearing afterwards would wipe that too and make the shift pointless.
+	-- Sanity is deliberately NOT cleared. The shift is additive, so a food that
+	-- already drained sanity drains that much more of it, and one that restored
+	-- sanity restores less. Clearing it first would throw away the food's own
+	-- cost and leave only the health damage.
 	hungerval = math.max(hungerval, 0)
-	sanityval = math.max(sanityval, 0)
 
 	if healthval < 0 then
 		sanityval = sanityval + healthval
