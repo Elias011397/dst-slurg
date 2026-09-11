@@ -8,7 +8,7 @@ and slow, then eats his way into becoming the biggest thing on the map.
 
 [list]
 [*][b]Food can never cost him health or hunger.[/b]
-[*][b]Harm becomes madness.[/b] Health damage is added onto the food's sanity cost, so anything that would have hurt him drains his mind instead.
+[*][b]Harm becomes madness.[/b] Health damage is added onto the food's sanity cost, so anything that would have hurt him drains his mind instead. [i]Mushrooms still get him this way.[/i]
 [*][b]Rot is a meal.[/b] Spoiled food loses none of its value to him.
 [*][b]Monster food and raw meat are free.[/b] Neither carries a penalty.
 [*][b]Filth is food.[/b] Poop, Guano and Compost are edible for Slurg alone.
@@ -31,6 +31,11 @@ Read as [i]health / hunger / sanity[/i]. Durian shows the rule: its own -5 sanit
 plus the -3 that would have hit his health comes to [b]-8[/b]. A food that
 restored sanity restores less instead, which is why the Cooked Blue Cap gives +7
 rather than +10. Ordinary food like the Carrot is untouched.
+
+[b]Mushrooms are the one thing that still really hurts him.[/b] A raw Red Cap
+normally takes 20 health and no sanity at all, so for Slurg it takes [b]20
+sanity[/b] and nothing else. A raw Green Cap keeps its full -50. He is immune to
+almost everything, and then walks into a mushroom.
 
 [hr][/hr]
 [h2]Eat garbage, grow[/h2]
