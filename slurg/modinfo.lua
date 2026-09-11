@@ -33,6 +33,10 @@ takes 3 health and 5 sanity; for Slurg it takes 8 sanity and no health.
 Mushrooms are the one thing that still really hurts him. A raw Red Cap
 normally takes 20 health and no sanity, so for Slurg it takes 20 sanity.
 
+They do fill him, though. Every mushroom restores an extra 10% of his stomach
+on top of its own hunger, 10 at level 0 and 100 at the cap. Fungus is food and
+poison at once.
+
 A FULL SLURG IS A FAST SLURG
 He swells as he fills up and shrinks as he empties, and his size carries his
 speed with it. Running on empty he is normal sized and a quarter slower than

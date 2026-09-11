@@ -34,6 +34,8 @@ TUNING.SLURG_SIZE_HUNGER_MIN = 0.01 -- below this he is normal sized
 TUNING.SLURG_SIZE_HUNGER_MAX = 0.90 -- at or above this he is at his cap
 -- max hunger scales from SLURG_HUNGER at level 0 to this at SLURG_MAX_LEVEL
 TUNING.SLURG_HUNGER_MAX = 1000
+-- mushrooms restore this share of his stomach on top of their own hunger
+TUNING.SLURG_MUSHROOM_HUNGER_PCT = 0.10
 
 -- passive health regen, see components/healthregen.lua
 TUNING.SLURG_REGEN_TICK = 1            -- seconds between regen ticks
@@ -163,6 +165,22 @@ local function onload(inst, data)
 	end
 end
 
+-- Mushrooms feed Slurg far better than they feed anyone else, so they need to
+-- be identified exactly. The mushroom tag alone is not enough: mushrooms.lua
+-- only tags the raw caps in capcommonfn, not the cooked ones. Match the known
+-- prefabs as well, and keep the tag check so mushrooms added by other mods are
+-- still covered.
+local mushroom_prefabs = {
+	red_cap = true,   red_cap_cooked = true,
+	green_cap = true, green_cap_cooked = true,
+	blue_cap = true,  blue_cap_cooked = true,
+	moon_cap = true,  moon_cap_cooked = true,
+}
+
+local function IsMushroom(food)
+	return food:HasTag("mushroom") or mushroom_prefabs[food.prefab] == true
+end
+
 -- Slurg's own food values, keyed by food prefab name. Omit a stat to leave it at 0.
 --
 -- health and sanity are flat amounts. hunger is flat PLUS hungerpct of Slurg's
@@ -208,6 +226,17 @@ local function oneat(inst, food)
 	applyupgrades(inst)
 end
 
+-- Read the max through the replica when the component is absent, which is the
+-- case on clients, where the display hook still needs the right number.
+local function GetMaxHunger(eater)
+	if eater == nil then
+		return nil
+	end
+	return (eater.components.hunger ~= nil and eater.components.hunger.max)
+		or (eater.replica ~= nil and eater.replica.hunger ~= nil and eater.replica.hunger:Max())
+		or nil
+end
+
 -- Works out what a food is worth to Slurg. Every edible is passed through here,
 -- because the last two rules apply to all food, not only the food we name.
 --
@@ -235,14 +264,10 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 		hungerval = food_stats["hunger"] or 0
 		sanityval = food_stats["sanity"] or 0
 
-		-- scale the hunger value with how big the eater's belly has grown. Read
-		-- the max through the replica so this is also correct on clients, where
-		-- the hunger component itself does not exist but the display hook still
-		-- needs the right number.
+		-- scale the hunger value with how big the eater's belly has grown
 		local hungerpct = food_stats["hungerpct"]
-		if hungerpct ~= nil and eater ~= nil then
-			local maxhunger = (eater.components.hunger ~= nil and eater.components.hunger.max)
-				or (eater.replica ~= nil and eater.replica.hunger ~= nil and eater.replica.hunger:Max())
+		if hungerpct ~= nil then
+			local maxhunger = GetMaxHunger(eater)
 			if maxhunger ~= nil then
 				hungerval = hungerval + (hungerpct * maxhunger)
 			end
@@ -258,6 +283,16 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 	-- sanity restores less. Clearing it first would throw away the food's own
 	-- cost and leave only the health damage.
 	hungerval = math.max(hungerval, 0)
+
+	-- Mushrooms restore a share of his stomach on top of their own hunger. Added
+	-- after the floor above, so a mushroom with negative hunger still gets the
+	-- full share rather than having it cancelled out.
+	if IsMushroom(food) then
+		local maxhunger = GetMaxHunger(eater)
+		if maxhunger ~= nil then
+			hungerval = hungerval + (TUNING.SLURG_MUSHROOM_HUNGER_PCT * maxhunger)
+		end
+	end
 
 	if healthval < 0 then
 		sanityval = sanityval + healthval
