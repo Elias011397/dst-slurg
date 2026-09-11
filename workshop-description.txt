@@ -1,15 +1,16 @@
 [h1]Slurg the Slime[/h1]
 
-A scavenger who turns the world's garbage into growth. Slurg starts small, frail
-and slow, then eats his way into becoming the biggest thing on the map.
+Slurg eats rot, droppings and anything else that has gone bad. He starts weak
+and slow, and every piece of garbage he eats makes him permanently bigger,
+tougher and faster.
 
 [hr][/hr]
 [h2]How he eats[/h2]
 
 [list]
-[*][b]Nothing can cost him health or hunger.[/b] Damage that would have hurt him is added onto the food's sanity cost instead, so harm goes to his mind and never his body.
+[*][b]Nothing can cost him health or hunger.[/b] Damage that would have hurt him is added onto the food's sanity cost instead.
 [*][b]He eats what nobody else can.[/b] Poop, Guano and Compost are food for Slurg alone. Rot keeps its full value, and monster meat and raw meat carry no penalty at all.
-[*][b]Mushrooms are the exception.[/b] They cannot reach his body, so they go for his mind instead, which makes a raw Red Cap the worst thing he can swallow. They also feed him 2% of his stomach on top of their own hunger. Fungus is food and poison at once.
+[*][b]Mushrooms are the exception.[/b] Their health damage becomes sanity damage, so a raw Red Cap costs him 20 sanity. They also give 2% of his stomach on top of their own hunger.
 [*][b]Garbage makes him grow.[/b] Rotted food and excrement raise his Level, up to a cap of 5000.
 [/list]
 
@@ -24,11 +25,10 @@ and slow, then eats his way into becoming the biggest thing on the map.
 [tr][td]Carrot[/td][td]+1 / 12.5 / 0[/td][td]+1 / 12.5 / 0[/td][/tr]
 [/table]
 
-Read as [i]health / hunger / sanity[/i]. Durian is the clearest case: its own -5
-sanity plus the -3 that would have hit his health comes to [b]-8[/b]. The shift
-works both ways, so a food that restored sanity restores less, which is why the
-Cooked Blue Cap gives +7 rather than +10. Ordinary food like the Carrot is
-untouched.
+Read as [i]health / hunger / sanity[/i]. Durian: its own -5 sanity plus the -3
+health becomes [b]-8 sanity[/b]. The shift works both ways, so a Cooked Blue Cap
+gives +7 instead of +10. Food with no health penalty, like the Carrot, is
+unchanged.
 
 [hr][/hr]
 [h2]Garbage levels him up[/h2]
@@ -74,8 +74,8 @@ and speeds up as his belly fills, peaking at [b]90% full[/b].
 [tr][td]90% or more[/td][td]x1.25[/td][td]x2.00[/td][td]x1.50[/td][td]x3.00[/td][/tr]
 [/table]
 
-Running on empty puts him at the [b]same floor whatever his level[/b], normal
-sized and a quarter below his usual pace, however much he has eaten in his life.
+An empty belly gives the [b]same result at every level[/b]: normal size, and a
+quarter below his usual speed.
 
 [hr][/hr]
 [h2]Slime regeneration[/h2]
@@ -94,17 +94,17 @@ levelled. Seconds per hit point:
 [tr][td]90% or more[/td][td]20[/td][td]16[/td][td]13[/td][td]11[/td][td]10[/td][/tr]
 [/table]
 
-Both scales are smooth rather than stepped, so every hunger point and every level
-counts and the rows above are only samples. That runs from one hit point every
-two minutes at his worst to six a minute at his best.
+Both scales are smooth, not stepped: every hunger point and every level changes
+the rate. The rows are samples. Range is one hit point every two minutes at
+worst, six a minute at best.
 
 [hr][/hr]
 [h2]The catch[/h2]
 
 [list]
-[*][b]A slow start.[/b] 50 health, a 100 stomach, and rot worth 2 hunger a piece. The first levels are a grind.
+[*][b]A slow start.[/b] 50 health, a 100 stomach, and rot worth only 2 hunger each.
 [*][b]Always hungry.[/b] He burns food 35% faster than anyone else.
-[*][b]It all rides on his belly.[/b] Let it empty and he is slow, small, and no longer healing, however far he has come.
+[*][b]Everything depends on his belly.[/b] Empty means slow, small and no healing, whatever his level.
 [/list]
 
 [hr][/hr]
