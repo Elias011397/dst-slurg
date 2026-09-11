@@ -296,6 +296,14 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 		healthval = 0
 	end
 
+	-- Monster food is the one thing this cannot touch. eater.lua:243 and :266
+	-- drop negative health and sanity outright when strongstomach is set, which
+	-- Slurg has, so anything moved into sanity here would never be applied.
+	-- Clear it, otherwise the food tooltip promises a cost he never pays.
+	if sanityval < 0 and food:HasTag("monstermeat") then
+		sanityval = 0
+	end
+
 	return true, healthval, hungerval, sanityval
 end
 

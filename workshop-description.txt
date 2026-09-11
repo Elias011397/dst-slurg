@@ -10,23 +10,23 @@ Eating any type of rotted food or excrement will raise his [b]Level[/b], up to a
 cap of 5000.
 
 [table]
-[tr][th]Food[/th][th]Health[/th][th]Hunger[/th][th]Sanity[/th][th]Levels[/th][/tr]
-[tr][td]Rot[/td][td]+3[/td][td]1 + 1%[/td][td]+1[/td][td]+1[/td][/tr]
-[tr][td]Spoiled Fish[/td][td]+3[/td][td]1 + 1%[/td][td]+1[/td][td]+1[/td][/tr]
-[tr][td]Poop[/td][td]+4[/td][td]10 + 3%[/td][td]+5[/td][td]+2[/td][/tr]
-[tr][td]Guano[/td][td]+5[/td][td]10 + 4%[/td][td]+5[/td][td]+2[/td][/tr]
-[tr][td]Wet Goop[/td][td]+5[/td][td]5 + 3%[/td][td]+5[/td][td]+3[/td][/tr]
-[tr][td]Compost[/td][td]+15[/td][td]15 + 6%[/td][td]+15[/td][td]+5[/td][/tr]
-[tr][td]Rotten Egg[/td][td]+25[/td][td]5 + 5%[/td][td]+10[/td][td]+10[/td][/tr]
-[tr][td]Glommer's Goop[/td][td]+50[/td][td]20 + 10%[/td][td]+50[/td][td]+25[/td][/tr]
+[tr][th]Food[/th][th]Normally[/th][th]Health[/th][th]Hunger[/th][th]Sanity[/th][th]Levels[/th][/tr]
+[tr][td]Rot[/td][td]-1 / -10 / 0[/td][td]+3[/td][td]1 + 1%[/td][td]+1[/td][td]+1[/td][/tr]
+[tr][td]Spoiled Fish[/td][td]-1 / -10 / 0[/td][td]+3[/td][td]1 + 1%[/td][td]+1[/td][td]+1[/td][/tr]
+[tr][td]Poop[/td][td]inedible[/td][td]+4[/td][td]10 + 3%[/td][td]+5[/td][td]+2[/td][/tr]
+[tr][td]Guano[/td][td]inedible[/td][td]+5[/td][td]10 + 4%[/td][td]+5[/td][td]+2[/td][/tr]
+[tr][td]Wet Goop[/td][td]0 / 0 / 0[/td][td]+5[/td][td]5 + 3%[/td][td]+5[/td][td]+3[/td][/tr]
+[tr][td]Compost[/td][td]inedible[/td][td]+15[/td][td]15 + 6%[/td][td]+15[/td][td]+5[/td][/tr]
+[tr][td]Rotten Egg[/td][td]-1 / -10 / 0[/td][td]+25[/td][td]5 + 5%[/td][td]+10[/td][td]+10[/td][/tr]
+[tr][td]Glommer's Goop[/td][td]+40 / 9.4 / -50[/td][td]+50[/td][td]20 + 10%[/td][td]+50[/td][td]+25[/td][/tr]
 [/table]
 
 [b]The % is a share of his stomach[/b], so the same garbage feeds him more as he
 grows. Rot is 1 + 1%: worth [b]2 hunger[/b] on a 100 stomach, and [b]11[/b] on a
 1000 one.
 
-Normally every one of these is either harmful or inedible. [b]Poop, Guano and
-Compost are food for Slurg alone[/b] and no other character can eat them.
+[b]Poop, Guano and Compost are food for Slurg alone[/b] and no other character
+can eat them.
 
 [hr][/hr]
 [h2]What levelling raises[/h2]
@@ -70,21 +70,26 @@ instead. It is the only way eating can cost him anything at all.
 
 [table]
 [tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
-[tr][td]Red Cap[/td][td]-20 hp[/td][td]0 hp, -20 sanity[/td][/tr]
-[tr][td]Durian[/td][td]-3 hp, -5 sanity[/td][td]0 hp, -3 sanity[/td][/tr]
-[tr][td]Cooked Blue Cap[/td][td]-3 hp, +10 sanity[/td][td]0 hp, +7 sanity[/td][/tr]
-[tr][td]Green Cap[/td][td]-50 sanity[/td][td]costs nothing[/td][/tr]
-[tr][td]Monster Meat[/td][td]-20 hp, -15 sanity[/td][td]costs nothing[/td][/tr]
+[tr][td]Red Cap[/td][td]-20 / 12.5 / 0[/td][td]0 / 12.5 / -20[/td][/tr]
+[tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -3[/td][/tr]
+[tr][td]Cooked Blue Cap[/td][td]-3 / 0 / +10[/td][td]0 / 0 / +7[/td][/tr]
+[tr][td]Cooked Red Cap[/td][td]+1 / 0 / -10[/td][td]+1 / 0 / 0[/td][/tr]
+[tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 12.5 / 0[/td][/tr]
+[tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 9.375 / 0[/td][/tr]
 [/table]
 
 Only the health damage carries across. A food's own sanity drain is wiped like
 everything else, so the sanity he loses is always exactly the harm that would
-have hit his body. Spoiled food also loses none of its value to him.
+have hit his body. Monster food is the exception twice over: his stomach throws
+out its penalties before the shift can reach them, so it costs him nothing.
+
+Raw meat, monster food and gears are all halved. He wants garbage, not groceries.
 
 [table]
-[tr][th]Category[/th][th]Normally[/th][th]For Slurg[/th][/tr]
-[tr][td]Raw meat[/td][td]full value[/td][td]half value[/td][/tr]
-[tr][td]Monster food[/td][td]full value[/td][td]half value[/td][/tr]
+[tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
+[tr][td]Meat[/td][td]+1 / 25 / -10[/td][td]+0.5 / 12.5 / 0[/td][/tr]
+[tr][td]Small Meat[/td][td]+1 / 12.5 / -10[/td][td]+0.5 / 6.25 / 0[/td][/tr]
+[tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 9.375 / 0[/td][/tr]
 [tr][td]Gears[/td][td]+60 / 75 / +50[/td][td]+10 / 12.5 / +10[/td][/tr]
 [/table]
 
