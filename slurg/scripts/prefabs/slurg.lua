@@ -187,33 +187,8 @@ local food_stat_dict = {
 	compost = { health = 15, sanity = 15, hunger = 15, hungerpct = 0.06, levels = 5 },
 	glommerfuel = { health = 50, sanity = 50, hunger = 20, hungerpct = 0.10, levels = 25 },
 	wetgoop = { health = 5, sanity = 5, hunger = 5, hungerpct = 0.03, levels = 3 },
-	-- half of the values this mod used to give (20 / 20 / 25)
-	gears = { health = 10, sanity = 10, hunger = 12.5 },
+	gears = { health = 20, sanity = 20, hunger = 25 },
 }
-
--- Food Slurg digests poorly. Unlike food_stat_dict these do not replace the
--- food's values, they scale the food's own values by the given fraction, so
--- they keep working if Klei retunes a food and they cover foods added by other
--- mods. Matched by tag, first match wins.
---
--- Values are not rounded: half of 18.75 hunger stays 9.375.
---
--- Note that negative values still get dropped entirely for monster food,
--- because eater.lua:243 and :266 skip negative health and sanity when
--- strongstomach is set. So halving monster meat only really halves its hunger.
-local food_multipliers = {
-	{ tag = "rawmeat", multiplier = 0.5 },
-	{ tag = "monstermeat", multiplier = 0.5 },
-}
-
-local function GetFoodMultiplier(food)
-	for _, v in ipairs(food_multipliers) do
-		if food:HasTag(v.tag) then
-			return v.multiplier
-		end
-	end
-	return nil
-end
 
 -- Eating Slurg food raises his level by that food's levels value.
 local function oneat(inst, food)
@@ -237,9 +212,9 @@ end
 -- because the last two rules apply to all food, not only the food we name.
 --
 --   1. a named entry in food_stat_dict replaces the values outright
---   2. otherwise a category multiplier scales the food's own values
---   3. hunger penalties are cleared, and any health penalty is added onto the
+--   2. hunger penalties are cleared, and any health penalty is added onto the
 --      food's sanity, which is the only meter eating can still cost him
+--
 -- basehealth, basehunger and basesanity are optional. Display mods run client
 -- side, where food has no edible component at all, so they pass the vanilla
 -- numbers in from their own cache instead.
@@ -249,7 +224,7 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 		return false, 0, 0, 0
 	end
 
-	-- Start from the food's own values so rules 3 and 4 have something to act on.
+	-- Start from the food's own values so rule 2 has something to act on.
 	local healthval = basehealth or (edible ~= nil and edible.healthvalue) or 0
 	local hungerval = basehunger or (edible ~= nil and edible.hungervalue) or 0
 	local sanityval = basesanity or (edible ~= nil and edible.sanityvalue) or 0
@@ -271,13 +246,6 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 			if maxhunger ~= nil then
 				hungerval = hungerval + (hungerpct * maxhunger)
 			end
-		end
-	else
-		local multiplier = GetFoodMultiplier(food)
-		if multiplier ~= nil then
-			healthval = healthval * multiplier
-			hungerval = hungerval * multiplier
-			sanityval = sanityval * multiplier
 		end
 	end
 

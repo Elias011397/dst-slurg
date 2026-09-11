@@ -4,6 +4,34 @@ A scavenger who turns the world's garbage into growth. Slurg starts small, frail
 and slow, then eats his way into becoming the biggest thing on the map.
 
 [hr][/hr]
+[h2]How he eats, in short[/h2]
+
+[list]
+[*][b]Food can never cost him health or hunger.[/b]
+[*][b]Harm becomes madness.[/b] Health damage is added onto the food's sanity cost, so anything that would have hurt him drains his mind instead.
+[*][b]Rot is a meal.[/b] Spoiled food loses none of its value to him.
+[*][b]Monster food is free.[/b] No penalty of any kind.
+[*][b]Filth is food.[/b] Poop, Guano and Compost are edible for Slurg alone.
+[*][b]Garbage makes him grow.[/b] Rotted food and excrement raise his Level.
+[/list]
+
+[table]
+[tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
+[tr][td]Rot[/td][td]-1 / -10 / 0[/td][td]+3 / 2 to 11 / +1[/td][/tr]
+[tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 18.75 / 0[/td][/tr]
+[tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -8[/td][/tr]
+[tr][td]Red Cap[/td][td]-20 / 12.5 / 0[/td][td]0 / 12.5 / -20[/td][/tr]
+[tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 12.5 / -50[/td][/tr]
+[tr][td]Cooked Blue Cap[/td][td]-3 / 0 / +10[/td][td]0 / 0 / +7[/td][/tr]
+[tr][td]Carrot[/td][td]+1 / 12.5 / 0[/td][td]+1 / 12.5 / 0[/td][/tr]
+[/table]
+
+Read as [i]health / hunger / sanity[/i]. Durian shows the rule: its own -5 sanity
+plus the -3 that would have hit his health comes to [b]-8[/b]. A food that
+restored sanity restores less instead, which is why the Cooked Blue Cap gives +7
+rather than +10. Ordinary food like the Carrot is untouched.
+
+[hr][/hr]
 [h2]Eat garbage, grow[/h2]
 
 Eating any type of rotted food or excrement will raise his [b]Level[/b], up to a
@@ -19,14 +47,12 @@ cap of 5000.
 [tr][td]Compost[/td][td]inedible[/td][td]+15[/td][td]15 + 6%[/td][td]+15[/td][td]+5[/td][/tr]
 [tr][td]Rotten Egg[/td][td]-1 / -10 / 0[/td][td]+25[/td][td]5 + 5%[/td][td]+10[/td][td]+10[/td][/tr]
 [tr][td]Glommer's Goop[/td][td]+40 / 9.4 / -50[/td][td]+50[/td][td]20 + 10%[/td][td]+50[/td][td]+25[/td][/tr]
+[tr][td]Gears[/td][td]+60 / 75 / +50[/td][td]+20[/td][td]25[/td][td]+20[/td][td]none[/td][/tr]
 [/table]
 
 [b]The % is a share of his stomach[/b], so the same garbage feeds him more as he
 grows. Rot is 1 + 1%: worth [b]2 hunger[/b] on a 100 stomach, and [b]11[/b] on a
 1000 one.
-
-[b]Poop, Guano and Compost are food for Slurg alone[/b] and no other character
-can eat them.
 
 [hr][/hr]
 [h2]What levelling raises[/h2]
@@ -60,42 +86,6 @@ where both peak at the caps above.
 
 An empty belly drops him to the [b]same floor at every level[/b], a quarter below
 his usual pace, however much he has eaten in his life.
-
-[hr][/hr]
-[h2]Slime stomach[/h2]
-
-[b]Food can never cost him health or hunger.[/b] Anything that would normally
-hurt him has that damage [b]added onto the food's sanity cost[/b] instead, so a
-food that already drained sanity drains that much more of it. Sanity is the only
-meter eating can still touch.
-
-[table]
-[tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
-[tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -8[/td][/tr]
-[tr][td]Red Cap[/td][td]-20 / 12.5 / 0[/td][td]0 / 12.5 / -20[/td][/tr]
-[tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 12.5 / -50[/td][/tr]
-[tr][td]Cooked Blue Cap[/td][td]-3 / 0 / +10[/td][td]0 / 0 / +7[/td][/tr]
-[tr][td]Cooked Green Cap[/td][td]-1 / 0 / +15[/td][td]0 / 0 / +14[/td][/tr]
-[tr][td]Cooked Moon Cap[/td][td]0 / -12.5 / -10[/td][td]0 / 0 / -10[/td][/tr]
-[tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 9.375 / 0[/td][/tr]
-[/table]
-
-Durian is the clearest case: its own -5 sanity plus the -3 that would have hit
-his health comes to [b]-8[/b]. A food that restored sanity restores less instead,
-so a Cooked Blue Cap gives +7 rather than +10.
-
-Monster food is the one thing untouched. His stomach throws out its penalties
-before the shift can reach them, leaving 0 / 9.375 / 0.
-
-Raw meat, monster food and gears are all halved. He wants garbage, not groceries.
-
-[table]
-[tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
-[tr][td]Meat[/td][td]+1 / 25 / -10[/td][td]+0.5 / 12.5 / 0[/td][/tr]
-[tr][td]Small Meat[/td][td]+1 / 12.5 / -10[/td][td]+0.5 / 6.25 / 0[/td][/tr]
-[tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 9.375 / 0[/td][/tr]
-[tr][td]Gears[/td][td]+60 / 75 / +50[/td][td]+10 / 12.5 / +10[/td][/tr]
-[/table]
 
 [hr][/hr]
 [h2]Slime regeneration[/h2]

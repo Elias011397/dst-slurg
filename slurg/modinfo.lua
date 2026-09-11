@@ -21,10 +21,9 @@ triple size.
 
 HE EATS WHAT NOBODY ELSE WILL
   - Poop, Guano and Compost become food, for Slurg alone.
-  - Slime stomach. Spoiled food loses nothing, monster meat costs him nothing.
-  - No food can ever cost him health.
-  - Raw meat, monster food and gears feed him at half value. He wants
-    garbage, not groceries.
+  - Food can never cost him health or hunger.
+  - Spoiled food loses none of its value to him.
+  - Monster food carries no penalty of any kind.
 
 Food cannot drain his hunger either. Anything that would normally hurt him
 adds that damage onto the food's sanity cost instead, so a food that already
