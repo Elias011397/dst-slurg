@@ -25,10 +25,10 @@ HE EATS WHAT NOBODY ELSE WILL
   - Spoiled food loses none of its value to him.
   - Monster food carries no penalty of any kind.
 
-Food cannot drain his hunger either. Anything that would normally hurt him
-adds that damage onto the food's sanity cost instead, so a food that already
-drained sanity drains that much more. Sanity is the only meter eating can
-still cost him.
+Sanity is the only meter eating can still cost him. Anything that would
+normally hurt him adds that damage onto the food's sanity cost, so a food
+that already drained sanity drains that much more of it. Durian normally
+takes 3 health and 5 sanity; for Slurg it takes 8 sanity and no health.
 
 A FULL SLURG IS A FAST SLURG
 He swells as he fills up and shrinks as he empties, and his size carries his
