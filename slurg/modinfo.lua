@@ -26,9 +26,9 @@ HE EATS WHAT NOBODY ELSE WILL
   - Raw meat, monster food and gears feed him at half value. He wants
     garbage, not groceries.
 
-Anything that would normally hurt him costs him sanity instead. The health
-damage is added to whatever sanity the food already took, so a rotten mushroom
-leaves his body untouched and his mind worse off.
+Food cannot drain his hunger or sanity either, with one exception: anything
+that would normally hurt him takes that damage out of his sanity instead. It
+is the only way eating can cost him anything at all.
 
 A FULL SLURG IS A FAST SLURG
 He swells as he fills up and shrinks as he empties, and his size carries his
