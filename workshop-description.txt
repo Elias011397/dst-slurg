@@ -37,19 +37,20 @@ Level only sets his [b]ceiling[/b]. How much of it he actually gets is decided b
 how full he is. Size and speed slide together as his belly fills, from [b]1%[/b]
 full up to [b]90%[/b] full, where both peak.
 
-Both measured against [i]his own[/i] empty state.
+Speed is measured against his own nominal pace, size against his own empty size.
 
 [table]
-[tr][th]Belly[/th][th]Size[/th][th]Speed[/th][/tr]
-[tr][td]Empty[/td][td]x1.0[/td][td]x1.0[/td][/tr]
-[tr][td]Full, Level 0[/td][td]x1.5[/td][td]x2.0[/td][/tr]
-[tr][td]Full, Level 2500[/td][td]x2.25[/td][td]x2.5[/td][/tr]
-[tr][td]Full, Level 5000[/td][td]x3.0[/td][td]x3.0[/td][/tr]
+[tr][th]Belly[/th][th]Level 0 size[/th][th]Level 0 speed[/th][th]Max size[/th][th]Max speed[/th][/tr]
+[tr][td]Empty[/td][td]x1.00[/td][td]x0.75[/td][td]x1.00[/td][td]x0.75[/td][/tr]
+[tr][td]25%[/td][td]x1.13[/td][td]x0.88[/td][td]x1.54[/td][td]x1.09[/td][/tr]
+[tr][td]50%[/td][td]x1.28[/td][td]x1.03[/td][td]x2.10[/td][td]x1.44[/td][/tr]
+[tr][td]75%[/td][td]x1.42[/td][td]x1.17[/td][td]x2.66[/td][td]x1.79[/td][/tr]
+[tr][td]90% or more[/td][td]x1.50[/td][td]x1.25[/td][td]x3.00[/td][td]x2.00[/td][/tr]
 [/table]
 
-So a full belly is worth [b]+100% speed[/b] to a fresh Slurg and [b]+200%[/b] to a
-capped one. An empty belly drops him to the same floor at every level, no matter
-how much he has eaten in his life.
+An [b]empty belly is the same floor at every level[/b], a quarter below his
+nominal pace, however much he has eaten in his life. Filling up is worth
+[b]+67% speed[/b] to a fresh Slurg and [b]+167%[/b] to a capped one.
 
 [hr][/hr]
 [h2]Regeneration[/h2]

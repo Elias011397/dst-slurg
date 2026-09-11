@@ -29,9 +29,10 @@ instead of his body: a mushroom's health damage becomes sanity loss.
 
 A FULL SLURG IS A FAST SLURG
 He swells as he fills up and shrinks as he empties, and his size carries his
-speed with it. An empty Slurg crawls no matter how much he has eaten in his
-life; a full one at max level moves at twice normal speed. All that progress
-is only worth something if you keep him fed.
+speed with it. Running on empty he is normal sized and a quarter slower than
+his usual pace, at every level, however much he has eaten in his life. Filled
+up he reaches triple size and double speed at the cap. All that progress is
+only worth something if you keep him fed.
 
 SLIME REGENERATION
 He slowly heals himself, but only while well fed. Below half a stomach it
@@ -47,7 +48,7 @@ Food tooltips from Item Info and Show Me display Slurg's real values, and
 only for players actually playing Slurg.
 ]]
 author = "UnNerfable"
-version = "1.05" -- This is the version of the template. Change it to your own number.
+version = "2.0" -- This is the version of the template. Change it to your own number.
 
 -- This is the URL name of the mod's thread on the forum; the part after the ? and before the first & in the url
 -- forumthread = "/files/file/950-extended-sample-character/"

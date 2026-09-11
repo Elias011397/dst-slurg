@@ -18,11 +18,12 @@ TUNING.SLURG_MAX_LEVEL = 5000
 -- For reference, TUNING.WILSON_RUN_SPEED is 6.
 --
 -- Speed ramps from EMPTY up to the level's top speed across the same fullness
--- band as size, so the range widens with level: 4 to 8 at level 0, 4 to 12 at
--- the cap. The 50% mark therefore rises with level rather than being pinned.
-TUNING.SLURG_SPEED_EMPTY = 4.0  -- effective speed when empty, at every level
-TUNING.SLURG_SPEED_MIN = 8.0    -- effective speed when full, at level 0
-TUNING.SLURG_SPEED_MAX = 12.0   -- effective speed when full, at SLURG_MAX_LEVEL
+-- band as size, so the range widens with level. Taking 4.0 as Slurg's nominal
+-- speed, that is x0.75 empty rising to x1.25 full at level 0, and x0.75 rising
+-- to x2.00 full at the cap. An empty belly is the same floor at every level.
+TUNING.SLURG_SPEED_EMPTY = 3.0  -- effective speed when empty, at every level
+TUNING.SLURG_SPEED_MIN = 5.0    -- effective speed when full, at level 0
+TUNING.SLURG_SPEED_MAX = 8.0    -- effective speed when full, at SLURG_MAX_LEVEL
 -- Physical size. Level sets the CAP; how much of that cap Slurg actually
 -- reaches is decided by how full he is. Size also multiplies movement speed,
 -- so a hungry Slurg is both small and slow.
