@@ -1,0 +1,122 @@
+[h1]Slurg the Slime[/h1]
+
+A scavenger who turns the world's garbage into growth. Slurg starts small, frail
+and slow, then eats his way into becoming the biggest thing on the map.
+
+[hr][/hr]
+[h2]Eat garbage, grow[/h2]
+
+Every piece of filth he swallows raises his [b]Level[/b]. The cap is Level 5000.
+
+[table]
+[tr][th]Source[/th][th]Levels[/th][th]To reach the cap[/th][th]Where[/th][/tr]
+[tr][td]Rot, Spoiled Fish[/td][td]+1[/td][td]5000[/td][td]Constant, everywhere[/td][/tr]
+[tr][td]Poop, Guano[/td][td]+2[/td][td]2500[/td][td]Beefalo, pigs, caves[/td][/tr]
+[tr][td]Compost[/td][td]+5[/td][td]1000[/td][td]Composting Bin[/td][/tr]
+[tr][td]Rotten Egg[/td][td]+10[/td][td]500[/td][td]Birdcage farming[/td][/tr]
+[tr][td]Glommer's Goop[/td][td]+25[/td][td]200[/td][td]One per full moon[/td][/tr]
+[/table]
+
+[hr][/hr]
+[h2]What levelling changes[/h2]
+
+Each stat measured against [i]its own[/i] starting value.
+
+[table]
+[tr][th]Stat[/th][th]Level 0[/th][th]Level 5000[/th][th]Growth[/th][/tr]
+[tr][td]Health[/td][td]50[/td][td]300[/td][td]x6[/td][/tr]
+[tr][td]Stomach[/td][td]100[/td][td]1000[/td][td]x10[/td][/tr]
+[tr][td]Damage[/td][td]x1[/td][td]x2.5[/td][td]x2.5[/td][/tr]
+[tr][td]Sanity[/td][td]150[/td][td]150[/td][td]unchanged[/td][/tr]
+[/table]
+
+[hr][/hr]
+[h2]What fullness changes[/h2]
+
+Level only sets his [b]ceiling[/b]. How much of it he actually gets is decided by
+how full he is. Size and speed slide together as his belly fills, from [b]1%[/b]
+full up to [b]90%[/b] full, where both peak.
+
+Both measured against [i]his own[/i] empty state.
+
+[table]
+[tr][th]Belly[/th][th]Size[/th][th]Speed[/th][/tr]
+[tr][td]Empty[/td][td]x1.0[/td][td]x1.0[/td][/tr]
+[tr][td]Full, Level 0[/td][td]x1.5[/td][td]x2.0[/td][/tr]
+[tr][td]Full, Level 2500[/td][td]x2.25[/td][td]x2.5[/td][/tr]
+[tr][td]Full, Level 5000[/td][td]x3.0[/td][td]x3.0[/td][/tr]
+[/table]
+
+So a full belly is worth [b]+100% speed[/b] to a fresh Slurg and [b]+200%[/b] to a
+capped one. An empty belly drops him to the same floor at every level, no matter
+how much he has eaten in his life.
+
+[hr][/hr]
+[h2]Regeneration[/h2]
+
+He slowly heals himself, but only while fed. Rate measured against [i]its own[/i]
+slowest setting.
+
+[table]
+[tr][th]Belly[/th][th]Rate[/th][th]Relative[/th][/tr]
+[tr][td]Below 50%[/td][td]none[/td][td]off[/td][/tr]
+[tr][td]50% full[/td][td]1 hp / 60s[/td][td]x1[/td][/tr]
+[tr][td]70% full[/td][td]1 hp / 35s[/td][td]x1.7[/td][/tr]
+[tr][td]90% full or more[/td][td]1 hp / 10s[/td][td]x6[/td][/tr]
+[/table]
+
+Levelling doubles the whole curve: a fresh Slurg regenerates at half rate, a
+capped one at full rate.
+
+[hr][/hr]
+[h2]Food values[/h2]
+
+Shown as normal value [b]->[/b] what Slurg gets, in health / hunger / sanity.
+
+[table]
+[tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
+[tr][td]Rot[/td][td]-1 / -10 / 0[/td][td]+3 / 2-11 / +1[/td][/tr]
+[tr][td]Spoiled Fish[/td][td]-1 / -10 / 0[/td][td]+3 / 2-11 / +1[/td][/tr]
+[tr][td]Rotten Egg[/td][td]-1 / -10 / 0[/td][td]+25 / 10-55 / +10[/td][/tr]
+[tr][td]Poop[/td][td]inedible[/td][td]+4 / 13-40 / +5[/td][/tr]
+[tr][td]Guano[/td][td]inedible[/td][td]+5 / 14-50 / +5[/td][/tr]
+[tr][td]Compost[/td][td]inedible[/td][td]+15 / 21-75 / +15[/td][/tr]
+[tr][td]Glommer's Goop[/td][td]+40 / 9.4 / -50[/td][td]+50 / 30-120 / +50[/td][/tr]
+[tr][td]Wet Goop[/td][td]0 / 0 / 0[/td][td]+5 / +5 / +5[/td][/tr]
+[tr][td]Gears[/td][td]+60 / 75 / +50[/td][td]+10 / 12.5 / +10[/td][/tr]
+[/table]
+
+Each garbage food restores a flat amount [b]plus a share of his stomach[/b], so
+the hunger figures are shown as a range: the low number is Level 0, the high
+number is the cap. Rot is 1 + 1% of stomach, Compost is 15 + 6%, and so on.
+
+[b]Poop, Guano and Compost are food for Slurg alone.[/b] No other character can
+eat them.
+
+[h3]And everything else[/h3]
+
+[table]
+[tr][th]Category[/th][th]Normally[/th][th]For Slurg[/th][/tr]
+[tr][td]Raw meat[/td][td]full value[/td][td]half value[/td][/tr]
+[tr][td]Monster food[/td][td]full value[/td][td]half value[/td][/tr]
+[tr][td]Mushrooms[/td][td]costs health[/td][td]costs sanity instead[/td][/tr]
+[tr][td]Spoiled food[/td][td]reduced by rot[/td][td]full value[/td][/tr]
+[tr][td]All other food[/td][td]penalties apply[/td][td]no penalties at all[/td][/tr]
+[/table]
+
+[b]Iron gut.[/b] Nothing in the game can drain his health, hunger or sanity.
+Mushrooms are the one exception: their toxicity still bites, but it lands on his
+mind rather than his body.
+
+[hr][/hr]
+[h2]The catch[/h2]
+
+[list]
+[*][b]Fragile start.[/b] 50 health and a 100 stomach.
+[*][b]Always hungry.[/b] He burns food 35% faster than anyone else.
+[*][b]Feast or famine.[/b] Empty means small, slow, and no healing.
+[/list]
+
+[hr][/hr]
+[i]Food tooltips from Item Info and Show Me display Slurg's real values, and only
+for players actually playing Slurg.[/i]
