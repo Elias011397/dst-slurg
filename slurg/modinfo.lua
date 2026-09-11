@@ -50,9 +50,9 @@ Above that it speeds up smoothly the fuller he is, and again the further he
 has levelled. Seconds per hit point:
 
   belly          level 0    level 2500   level 5000
-   50% .......... 240 ......... 160 ......... 120
-   70% .......... 130 .......... 87 .......... 65
-   90% ........... 20 .......... 13 .......... 10
+   50% .......... 240 .......... 96 .......... 60
+   70% .......... 140 .......... 56 .......... 35
+   90% ........... 40 .......... 16 .......... 10
 
 Every hunger point and every level counts, not just these.
 

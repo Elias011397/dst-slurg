@@ -41,9 +41,9 @@ TUNING.SLURG_MUSHROOM_HUNGER_PCT = 0.02
 TUNING.SLURG_REGEN_TICK = 1            -- seconds between regen ticks
 TUNING.SLURG_REGEN_HUNGER_MIN = 0.50   -- no regen below this fullness
 TUNING.SLURG_REGEN_HUNGER_PEAK = 0.90  -- fastest regen at or above this fullness
-TUNING.SLURG_REGEN_PERIOD_FLOOR = 120  -- seconds per hp at HUNGER_MIN
+TUNING.SLURG_REGEN_PERIOD_FLOOR = 60   -- seconds per hp at HUNGER_MIN
 TUNING.SLURG_REGEN_PERIOD_PEAK = 10    -- seconds per hp at HUNGER_PEAK
-TUNING.SLURG_REGEN_COEFF_MIN = 0.5     -- regen speed multiplier at level 0
+TUNING.SLURG_REGEN_COEFF_MIN = 0.25    -- regen speed multiplier at level 0
 TUNING.SLURG_REGEN_COEFF_MAX = 1.0     -- regen speed multiplier at SLURG_MAX_LEVEL
 
 -- char starting inventory
