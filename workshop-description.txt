@@ -15,7 +15,7 @@ cap of 5000.
 [tr][td]Spoiled Fish[/td][td]+3[/td][td]1 + 1%[/td][td]+1[/td][td]+1[/td][/tr]
 [tr][td]Poop[/td][td]+4[/td][td]10 + 3%[/td][td]+5[/td][td]+2[/td][/tr]
 [tr][td]Guano[/td][td]+5[/td][td]10 + 4%[/td][td]+5[/td][td]+2[/td][/tr]
-[tr][td]Wet Goop[/td][td]+5[/td][td]5[/td][td]+5[/td][td]+3[/td][/tr]
+[tr][td]Wet Goop[/td][td]+5[/td][td]5 + 3%[/td][td]+5[/td][td]+3[/td][/tr]
 [tr][td]Compost[/td][td]+15[/td][td]15 + 6%[/td][td]+15[/td][td]+5[/td][/tr]
 [tr][td]Rotten Egg[/td][td]+25[/td][td]5 + 5%[/td][td]+10[/td][td]+10[/td][/tr]
 [tr][td]Glommer's Goop[/td][td]+50[/td][td]20 + 10%[/td][td]+50[/td][td]+25[/td][/tr]
@@ -23,7 +23,7 @@ cap of 5000.
 
 [b]The % is a share of his stomach[/b], so the same garbage feeds him more as he
 grows. Rot is 1 + 1%: worth [b]2 hunger[/b] on a 100 stomach, and [b]11[/b] on a
-1000 one. Wet Goop is the one flat value, always 5.
+1000 one.
 
 Normally every one of these is either harmful or inedible. [b]Poop, Guano and
 Compost are food for Slurg alone[/b] and no other character can eat them.
