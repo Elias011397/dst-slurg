@@ -129,8 +129,7 @@ AddPrefabPostInit("compostingbin", function(inst)
 	end
 end)
 
--- TEMPORARY diagnostics for the Item Info integration.
- Everything it prints is
+-- TEMPORARY diagnostics for the Item Info integration. Everything it prints is
 -- prefixed SLURGDBG so it can be grepped straight out of client_log.txt. Set
 -- SLURG_DEBUG to false, or delete this block and its callers, once the
 -- integration is confirmed working.
