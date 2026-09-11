@@ -1,6 +1,51 @@
 -- This information tells other players more about the mod
 name = "Slurg"
-description = "Slurg the Slime"
+description = [[
+A scavenger who turns the world's garbage into growth. Slurg starts small,
+frail and slow, then eats his way into becoming the biggest thing on the map.
+
+EAT GARBAGE, GROW
+Every piece of filth he swallows raises his Level, permanently increasing his
+health, stomach, damage and size. Richer garbage is worth far more:
+
+  Rot, Spoiled Fish ....... +1    constant, everywhere
+  Poop, Guano ............. +2    beefalo, pigs, caves
+  Compost ................. +5    needs a Composting Bin
+  Rotten Egg .............. +10   birdcage farming
+  Glommer's Goop .......... +25   one per full moon
+
+At the level cap he reaches 300 health, a 1000 stomach, 2.5x damage and
+triple size.
+
+HE EATS WHAT NOBODY ELSE WILL
+  - Poop, Guano and Compost become food, for Slurg alone.
+  - Iron gut. Spoiled food loses nothing, monster meat costs him nothing.
+  - No food in the game can drain his health, hunger or sanity.
+  - Raw meat, monster food and gears feed him at half value. He wants
+    garbage, not groceries.
+
+Mushrooms are the exception. Their toxicity still bites, but it hits his mind
+instead of his body: a mushroom's health damage becomes sanity loss.
+
+A FULL SLURG IS A FAST SLURG
+He swells as he fills up and shrinks as he empties, and his size carries his
+speed with it. An empty Slurg crawls no matter how much he has eaten in his
+life; a full one at max level moves at twice normal speed. All that progress
+is only worth something if you keep him fed.
+
+SLIME REGENERATION
+He slowly heals himself, but only while well fed. Below half a stomach it
+stops entirely. The fuller he is the faster it runs, and it speeds up as he
+levels.
+
+THE CATCH
+  - Fragile start. 50 health and a tiny stomach.
+  - Always hungry. He burns food 35% faster than everyone else.
+  - Feast or famine. Empty means small, slow and no healing.
+
+Food tooltips from Item Info and Show Me display Slurg's real values, and
+only for players actually playing Slurg.
+]]
 author = "UnNerfable"
 version = "1.05" -- This is the version of the template. Change it to your own number.
 
