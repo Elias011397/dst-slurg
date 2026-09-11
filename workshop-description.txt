@@ -10,7 +10,7 @@ and slow, then eats his way into becoming the biggest thing on the map.
 [*][b]Food can never cost him health or hunger.[/b]
 [*][b]Harm becomes madness.[/b] Health damage is added onto the food's sanity cost, so anything that would have hurt him drains his mind instead.
 [*][b]Rot is a meal.[/b] Spoiled food loses none of its value to him.
-[*][b]Monster food is free.[/b] No penalty of any kind.
+[*][b]Monster food and raw meat are free.[/b] Neither carries a penalty.
 [*][b]Filth is food.[/b] Poop, Guano and Compost are edible for Slurg alone.
 [*][b]Garbage makes him grow.[/b] Rotted food and excrement raise his Level.
 [/list]
@@ -19,6 +19,7 @@ and slow, then eats his way into becoming the biggest thing on the map.
 [tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
 [tr][td]Rot[/td][td]-1 / -10 / 0[/td][td]+3 / 2 to 11 / +1[/td][/tr]
 [tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 18.75 / 0[/td][/tr]
+[tr][td]Raw Meat[/td][td]+1 / 25 / -10[/td][td]+1 / 25 / 0[/td][/tr]
 [tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -8[/td][/tr]
 [tr][td]Red Cap[/td][td]-20 / 12.5 / 0[/td][td]0 / 12.5 / -20[/td][/tr]
 [tr][td]Green Cap[/td][td]0 / 12.5 / -50[/td][td]0 / 12.5 / -50[/td][/tr]

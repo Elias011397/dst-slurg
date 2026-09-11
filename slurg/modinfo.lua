@@ -23,7 +23,7 @@ HE EATS WHAT NOBODY ELSE WILL
   - Poop, Guano and Compost become food, for Slurg alone.
   - Food can never cost him health or hunger.
   - Spoiled food loses none of its value to him.
-  - Monster food carries no penalty of any kind.
+  - Monster food and raw meat carry no penalty of any kind.
 
 Sanity is the only meter eating can still cost him. Anything that would
 normally hurt him adds that damage onto the food's sanity cost, so a food

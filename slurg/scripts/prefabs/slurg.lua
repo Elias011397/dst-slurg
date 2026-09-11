@@ -264,11 +264,12 @@ local function calculateFoodValues(food, eater, basehealth, basehunger, basesani
 		healthval = 0
 	end
 
-	-- Monster food is the one thing this cannot touch. eater.lua:243 and :266
-	-- drop negative health and sanity outright when strongstomach is set, which
-	-- Slurg has, so anything moved into sanity here would never be applied.
+	-- Monster food and raw meat are the two things this cannot touch.
+	-- Eater:DoFoodEffects is false for both, because Slurg has strongstomach and
+	-- eatsrawmeat, so eater.lua:243 and :266 drop their negative health and
+	-- sanity outright and anything moved into sanity here is never applied.
 	-- Clear it, otherwise the food tooltip promises a cost he never pays.
-	if sanityval < 0 and food:HasTag("monstermeat") then
+	if sanityval < 0 and (food:HasTag("monstermeat") or food:HasTag("rawmeat")) then
 		sanityval = 0
 	end
 
@@ -313,6 +314,8 @@ local master_postinit = function(inst)
 		inst.components.eater:SetCanEatHorrible()
 		inst.components.eater:SetCanEatGears()
 		inst.components.eater:SetCanEatRaw()
+		-- raw meat costs him no sanity, the same call Webber uses
+		inst.components.eater:SetCanEatRawMeat(true)
 		-- Droppings, made edible for Slurg alone in modmain.lua.
 		-- caneat is what lets him eat it at all. preferseating is separate and
 		-- also required: without it the stategraph refuses the food and pushes
