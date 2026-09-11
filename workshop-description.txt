@@ -4,21 +4,17 @@ A scavenger who turns the world's garbage into growth. Slurg starts small, frail
 and slow, then eats his way into becoming the biggest thing on the map.
 
 [hr][/hr]
-[h2]How he eats, in short[/h2]
+[h2]How he eats[/h2]
 
 [list]
-[*][b]Food can never cost him health or hunger.[/b]
-[*][b]Harm becomes madness.[/b] Health damage is added onto the food's sanity cost, so anything that would have hurt him drains his mind instead. [i]Mushrooms still get him this way.[/i]
-[*][b]Rot is a meal.[/b] Spoiled food loses none of its value to him.
-[*][b]Monster food and raw meat are free.[/b] Neither carries a penalty.
-[*][b]Filth is food.[/b] Poop, Guano and Compost are edible for Slurg alone.
-[*][b]Fungus fills him.[/b] Every mushroom restores an extra 2% of his stomach.
-[*][b]Garbage makes him grow.[/b] Rotted food and excrement raise his Level.
+[*][b]Nothing can cost him health or hunger.[/b] Damage that would have hurt him is added onto the food's sanity cost instead, so harm goes to his mind and never his body.
+[*][b]He eats what nobody else can.[/b] Poop, Guano and Compost are food for Slurg alone. Rot keeps its full value, and monster meat and raw meat carry no penalty at all.
+[*][b]Mushrooms are the exception.[/b] They cannot reach his body, so they go for his mind instead, which makes a raw Red Cap the worst thing he can swallow. They also feed him 2% of his stomach on top of their own hunger. Fungus is food and poison at once.
+[*][b]Garbage makes him grow.[/b] Rotted food and excrement raise his Level, up to a cap of 5000.
 [/list]
 
 [table]
 [tr][th]Food[/th][th]Normally[/th][th]For Slurg[/th][/tr]
-[tr][td]Rot[/td][td]-1 / -10 / 0[/td][td]+3 / 2 to 11 / +1[/td][/tr]
 [tr][td]Monster Meat[/td][td]-20 / 18.75 / -15[/td][td]0 / 18.75 / 0[/td][/tr]
 [tr][td]Raw Meat[/td][td]+1 / 25 / -10[/td][td]+1 / 25 / 0[/td][/tr]
 [tr][td]Durian[/td][td]-3 / 25 / -5[/td][td]0 / 25 / -8[/td][/tr]
@@ -28,26 +24,14 @@ and slow, then eats his way into becoming the biggest thing on the map.
 [tr][td]Carrot[/td][td]+1 / 12.5 / 0[/td][td]+1 / 12.5 / 0[/td][/tr]
 [/table]
 
-Read as [i]health / hunger / sanity[/i]. Durian shows the rule: its own -5 sanity
-plus the -3 that would have hit his health comes to [b]-8[/b]. A food that
-restored sanity restores less instead, which is why the Cooked Blue Cap gives +7
-rather than +10. Ordinary food like the Carrot is untouched.
-
-[b]Mushrooms are the one thing that still really hurts him.[/b] A raw Red Cap
-normally takes 20 health and no sanity at all, so for Slurg it takes [b]20
-sanity[/b] and nothing else. A raw Green Cap keeps its full -50. He is immune to
-almost everything, and then walks into a mushroom.
-
-They do feed him, though. Every mushroom gives [b]2% of his stomach[/b] on top
-of whatever hunger it already had. That is only 2 points early on, but 20 once
-his stomach reaches 1000, which is enough to make a cooked cap worth eating when
-it feeds nobody else at all. Fungus is food and poison at once.
+Read as [i]health / hunger / sanity[/i]. Durian is the clearest case: its own -5
+sanity plus the -3 that would have hit his health comes to [b]-8[/b]. The shift
+works both ways, so a food that restored sanity restores less, which is why the
+Cooked Blue Cap gives +7 rather than +10. Ordinary food like the Carrot is
+untouched.
 
 [hr][/hr]
-[h2]Eat garbage, grow[/h2]
-
-Eating any type of rotted food or excrement will raise his [b]Level[/b], up to a
-cap of 5000.
+[h2]Garbage levels him up[/h2]
 
 [table]
 [tr][th]Food[/th][th]Normally[/th][th]Health[/th][th]Hunger[/th][th]Sanity[/th][th]Levels[/th][/tr]
@@ -62,32 +46,26 @@ cap of 5000.
 [tr][td]Gears[/td][td]+60 / 75 / +50[/td][td]+20[/td][td]25[/td][td]+20[/td][td]none[/td][/tr]
 [/table]
 
-[b]The % is a share of his stomach[/b], which grows from 100 to 1000, so the
-same garbage feeds him better the bigger he gets. Rot is 1 + 1%, so it restores
-[b]2 hunger[/b] at level 0 and [b]11[/b] at the cap.
+The [b]%[/b] is a share of his stomach, which grows from 100 to 1000, so the same
+garbage feeds him better the bigger he gets. Rot is 1 + 1%, restoring [b]2
+hunger[/b] at level 0 and [b]11[/b] at the cap.
 
 [hr][/hr]
-[h2]What levelling raises[/h2]
+[h2]What a level buys[/h2]
 
 [table]
 [tr][th][/th][th]Level 0[/th][th]Level 5000[/th][/tr]
 [tr][td]Health[/td][td]50[/td][td]300[/td][/tr]
 [tr][td]Stomach[/td][td]100[/td][td]1000[/td][/tr]
 [tr][td]Damage[/td][td]x1[/td][td]x2.5[/td][/tr]
+[tr][td]Sanity[/td][td]150[/td][td]150[/td][/tr]
 [tr][td][b]Speed cap[/b][/td][td][b]x1.25[/b][/td][td][b]x2.00[/b][/td][/tr]
 [tr][td][b]Size cap[/b][/td][td][b]x1.50[/b][/td][td][b]x3.00[/b][/td][/tr]
-[tr][td]Sanity[/td][td]150[/td][td]150[/td][/tr]
 [/table]
 
-Health, stomach and damage are simply his. Speed and size are [b]caps[/b] he only
-reaches on a full stomach. Levelling raises the ceiling; eating decides how close
-he gets to it.
-
-[hr][/hr]
-[h2]How full he is decides the rest[/h2]
-
-He swells and speeds up as his belly fills, from empty up to [b]90% full[/b],
-where both peak at the caps above.
+The first four are simply his. Speed and size are only [b]caps[/b]: levelling
+raises the ceiling, and how full he is decides how close he gets to it. He swells
+and speeds up as his belly fills, peaking at [b]90% full[/b].
 
 [table]
 [tr][th]Belly[/th][th]Speed, Level 0[/th][th]Speed, Level 5000[/th][th]Size, Level 0[/th][th]Size, Level 5000[/th][/tr]
@@ -96,16 +74,15 @@ where both peak at the caps above.
 [tr][td]90% or more[/td][td]x1.25[/td][td]x2.00[/td][td]x1.50[/td][td]x3.00[/td][/tr]
 [/table]
 
-An empty belly drops him to the [b]same floor at every level[/b], a quarter below
-his usual pace, however much he has eaten in his life.
+Running on empty puts him at the [b]same floor whatever his level[/b], normal
+sized and a quarter below his usual pace, however much he has eaten in his life.
 
 [hr][/hr]
 [h2]Slime regeneration[/h2]
 
 He heals himself, but only while fed. Below half a stomach it stops entirely.
-Above that it speeds up the fuller he is, and again the further he has levelled.
-
-Seconds per hit point:
+Above that it runs faster the fuller he is, and faster again the further he has
+levelled. Seconds per hit point:
 
 [table]
 [tr][th]Belly[/th][th]Level 0[/th][th]Level 1250[/th][th]Level 2500[/th][th]Level 3750[/th][th]Level 5000[/th][/tr]
@@ -117,19 +94,17 @@ Seconds per hit point:
 [tr][td]90% or more[/td][td]20[/td][td]16[/td][td]13[/td][td]11[/td][td]10[/td][/tr]
 [/table]
 
-[b]Both scales are smooth[/b], not stepped. Every hunger point between 50% and
-90% changes the rate, and so does every level. The rows above are only samples.
-
-At his worst that is one hit point every two minutes; at his best, six a minute.
+Both scales are smooth rather than stepped, so every hunger point and every level
+counts and the rows above are only samples. That runs from one hit point every
+two minutes at his worst to six a minute at his best.
 
 [hr][/hr]
 [h2]The catch[/h2]
 
 [list]
-[*][b]Fragile start.[/b] 50 health and a 100 stomach.
+[*][b]A slow start.[/b] 50 health, a 100 stomach, and rot worth 2 hunger a piece. The first levels are a grind.
 [*][b]Always hungry.[/b] He burns food 35% faster than anyone else.
-[*][b]Feast or famine.[/b] Empty means small, slow, and no healing.
-[*][b]It goes to his head.[/b] Harmful food spares his body and takes his mind.
+[*][b]It all rides on his belly.[/b] Let it empty and he is slow, small, and no longer healing, however far he has come.
 [/list]
 
 [hr][/hr]
