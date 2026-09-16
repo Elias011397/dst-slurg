@@ -71,18 +71,34 @@ TUNING.SLURG_MUSHROOM_HUNGER_PCT = 0.02
 TUNING.SLURG_REGEN_TICK = 1            -- seconds between regen ticks
 TUNING.SLURG_REGEN_HUNGER_MIN = 0.50   -- no regen below this fullness
 TUNING.SLURG_REGEN_HUNGER_PEAK = 0.90  -- fastest regen at or above this fullness
--- PERIOD_* are pre-level, so the numbers you actually feel are PERIOD / COEFF.
--- The four corners those four constants produce:
+-- Seconds per hitpoint is BASE divided by two independent divisors:
+--
+--     sec/hp = BASE / (hungerdiv * leveldiv)
+--
+-- The four corners:
 --
 --                    50% full     90% full and up
---     level 0          240s             40s
---     level 5000        30s              5s
+--     level 0        240s (/1)       40s (/6)
+--     level 5000      30s (/8)        5s (/48)
 --
--- COEFF_MAX is 8x COEFF_MIN, which is where the 240->30 and 40->5 come from.
-TUNING.SLURG_REGEN_PERIOD_FLOOR = 60   -- seconds per hp at HUNGER_MIN, pre-level
-TUNING.SLURG_REGEN_PERIOD_PEAK = 10    -- seconds per hp at HUNGER_PEAK, pre-level
-TUNING.SLURG_REGEN_COEFF_MIN = 0.25    -- regen rate multiplier at level 0
-TUNING.SLURG_REGEN_COEFF_MAX = 2.0     -- regen rate multiplier at SLURG_MAX_LEVEL
+-- The two axes are interpolated DIFFERENTLY, on purpose.
+--
+-- Fullness is linear in SECONDS: a straight line from 240s down to 240/6 =
+-- 40s across HUNGER_MIN..HUNGER_PEAK. Every hunger point in that band is
+-- worth the same fixed number of seconds, 5s each at level 0.
+--
+-- Level is exponential, LEVEL_DIV^t rather than 1 + 7t. Applying a divisor
+-- linearly makes the time a reciprocal of a straight line, and a reciprocal
+-- collapses early: at 1 + 7t the first 1250 levels alone were worth 73% of the
+-- whole 240s -> 30s gain and the last 1250 were worth 4%. At 8^t every equal
+-- slice of levelling is worth the same PROPORTIONAL gain instead, x1.682 per
+-- 1250 levels, which is a straight halving of the time every 1667 levels.
+--
+-- Fullness does not need that treatment because it is already expressed in
+-- seconds rather than as a divisor, so it was never front-loaded.
+TUNING.SLURG_REGEN_BASE = 240          -- sec/hp with both divisors at 1
+TUNING.SLURG_REGEN_HUNGER_DIV = 6      -- fullness divides the time by up to this
+TUNING.SLURG_REGEN_LEVEL_DIV = 8       -- level divides the time by up to this
 
 -- char starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.SLURG = {

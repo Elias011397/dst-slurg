@@ -4,21 +4,26 @@
 -- How fast Slurg heals depends on how full he is, and on how far he has
 -- levelled.
 --
--- Hunger sets the base seconds-per-hitpoint. It is interpolated linearly
--- so that every hunger point matters, not just the round numbers:
---
---     below 50%      no regen at all
---     at    50%      SLURG_REGEN_PERIOD_FLOOR seconds per hp  (slowest)
---     at    90%      SLURG_REGEN_PERIOD_PEAK  seconds per hp  (fastest)
---     above 90%      stays at the peak; 90% is as good as it gets
---
--- Level then scales the whole thing by a coefficient running from
--- SLURG_REGEN_COEFF_MIN at level 0 to SLURG_REGEN_COEFF_MAX at
--- SLURG_MAX_LEVEL. Those are 0.25 and 2.0, so a fresh Slurg heals at an
--- EIGHTH the rate a maxed one does however stuffed he is, and grows into
--- the perk. Best case is 5 seconds per hitpoint; worst is 240.
+-- Two divisors, applied to SLURG_REGEN_BASE seconds per hitpoint:
 --
 --     effective seconds per hp = period(hunger) / coefficient(level)
+--                              = BASE / (hungerdiv * leveldiv)
+--
+-- Hunger sets the first, and it is LINEAR IN SECONDS: no regen at all below
+-- SLURG_REGEN_HUNGER_MIN, then a straight line from BASE down to
+-- BASE / SLURG_REGEN_HUNGER_DIV at SLURG_REGEN_HUNGER_PEAK, flat above it.
+-- Every hunger point in the band is therefore worth the same fixed number of
+-- seconds -- 5s each at level 0, where the belly holds 100.
+--
+-- Level sets the second, and it is EXPONENTIAL: SLURG_REGEN_LEVEL_DIV raised
+-- to the normalised level. That is deliberate and the two are not the same
+-- shape on purpose. A divisor applied linearly makes the resulting time a
+-- reciprocal of a straight line, which dumps most of the gain into the first
+-- few levels; raising it to a power instead gives every equal slice of
+-- levelling the same proportional pay-off. See the SLURG_REGEN_* block in
+-- prefabs/slurg.lua.
+--
+-- Best case is 5 seconds per hitpoint, worst is 240.
 --
 -- Because the rate slides around continuously, we tick on a fixed interval
 -- and bank fractional progress, spending it only in whole hitpoints. That
@@ -46,13 +51,16 @@ function HealthRegen:GetPeriod(hungerpct)
 	end
 	local span = TUNING.SLURG_REGEN_HUNGER_PEAK - TUNING.SLURG_REGEN_HUNGER_MIN
 	local t = math.min((hungerpct - TUNING.SLURG_REGEN_HUNGER_MIN) / span, 1)
-	return Lerp(TUNING.SLURG_REGEN_PERIOD_FLOOR, TUNING.SLURG_REGEN_PERIOD_PEAK, t)
+	-- linear in SECONDS, not in the divisor, so every hunger point is worth
+	-- the same fixed number of seconds
+	return Lerp(TUNING.SLURG_REGEN_BASE,
+		TUNING.SLURG_REGEN_BASE / TUNING.SLURG_REGEN_HUNGER_DIV, t)
 end
 
--- Regen speed multiplier for Slurg's current level.
+-- How much faster Slurg's current level makes him heal, 1x up to LEVEL_DIV.
 function HealthRegen:GetCoefficient()
 	local t = math.min((self.inst.level or 0) / TUNING.SLURG_MAX_LEVEL, 1)
-	return Lerp(TUNING.SLURG_REGEN_COEFF_MIN, TUNING.SLURG_REGEN_COEFF_MAX, t)
+	return TUNING.SLURG_REGEN_LEVEL_DIV ^ t
 end
 
 function HealthRegen:OnTick(dt)

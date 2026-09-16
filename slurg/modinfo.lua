@@ -66,13 +66,15 @@ Above that it speeds up smoothly the fuller he is, and again the further he
 has levelled. Seconds per hit point:
 
   belly          level 0    level 2500   level 5000
-   50% .......... 240 .......... 53 .......... 30
-   70% .......... 140 .......... 31 .......... 18
-   90% ........... 40 ........... 9 ........... 5
+   50% .......... 240 .......... 85 .......... 30
+   70% .......... 140 .......... 49 .......... 18
+   90% ........... 40 .......... 14 ........... 5
 
-Every hunger point and every level counts, not just these. At the cap he heals
-eight times faster than a fresh Slurg, which more than covers his health bar
-being six times bigger.
+Every hunger point and every level counts, not just these, and both are even.
+Feeding him is worth a flat 5 seconds off the timer per point of hunger.
+Levelling halves the time every 1667 levels. A full belly divides it by six and
+the level cap by eight, for a best case of 5 seconds a hit point against a
+worst case of 240.
 
 THE CATCH
   - Fragile start. 50 health and a tiny stomach.

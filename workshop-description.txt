@@ -110,17 +110,20 @@ sec / hp[/th][th]Lv 3750
 sec / hp[/th][th]Lv 5000
 sec / hp[/th][/tr]
 [tr][td]under 50%[/td][td]no healing[/td][td]no healing[/td][td]no healing[/td][td]no healing[/td][td]no healing[/td][/tr]
-[tr][td]50%[/td][td]240[/td][td]87[/td][td]53[/td][td]38[/td][td]30[/td][/tr]
-[tr][td]60%[/td][td]190[/td][td]69[/td][td]42[/td][td]30[/td][td]24[/td][/tr]
-[tr][td]70%[/td][td]140[/td][td]51[/td][td]31[/td][td]22[/td][td]18[/td][/tr]
-[tr][td]80%[/td][td]90[/td][td]33[/td][td]20[/td][td]14[/td][td]11[/td][/tr]
-[tr][td]90% or more[/td][td]40[/td][td]15[/td][td]9[/td][td]6[/td][td]5[/td][/tr]
+[tr][td]50%[/td][td]240[/td][td]143[/td][td]85[/td][td]50[/td][td]30[/td][/tr]
+[tr][td]60%[/td][td]190[/td][td]113[/td][td]67[/td][td]40[/td][td]24[/td][/tr]
+[tr][td]70%[/td][td]140[/td][td]83[/td][td]49[/td][td]29[/td][td]18[/td][/tr]
+[tr][td]80%[/td][td]90[/td][td]54[/td][td]32[/td][td]19[/td][td]11[/td][/tr]
+[tr][td]90% or more[/td][td]40[/td][td]24[/td][td]14[/td][td]8[/td][td]5[/td][/tr]
 [/table]
 
 Both scales are smooth, not stepped: every hunger point and every level changes
-the rate. The rows are samples. At the cap he heals eight times faster than a
-fresh Slurg, which outpaces his health bar growing six times bigger, so filling
-it up takes 33 minutes at level 0 and 25 at level 5000.
+the rate. The rows are samples.
+
+Both axes are even, in the way that suits each. Feeding him is worth a flat 5
+seconds off the timer per point of hunger, the same at the top of the band as at
+the bottom. Levelling is worth a steady x1.68 per 1250 levels, which is a
+straight halving of the time every 1667 levels.
 
 [hr][/hr]
 [h2]The catch[/h2]
