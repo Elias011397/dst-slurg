@@ -1,92 +1,59 @@
 -- This information tells other players more about the mod
 name = "Slurg"
 description = [[
-A scavenger who turns the world's garbage into growth. Slurg starts frail and
-no quicker than anyone else, then eats his way into becoming the biggest and
-fastest thing on the map.
+Slurg eats garbage. Rot, poop, guano, compost, rotten eggs. Every piece raises
+his Level, up to 5000, and every Level makes him tougher, bigger and faster.
 
-EAT GARBAGE, GROW
-Eating any type of rotted food or excrement will raise his Level, permanently
-increasing his health, stomach, damage and size, tripling the speed a full belly
-is worth to him, and wearing down the penalty for an empty one. Richer garbage
-is worth far more:
+He starts weak: 50 health, a small stomach, and he burns food 35% faster than
+anyone else.
 
-  Rot, Spoiled Fish ....... +1    constant, everywhere
-  Poop, Guano ............. +2    beefalo, pigs, caves
-  Wet Goop ................ +3    any failed crock pot dish
-  Compost ................. +5    needs a Composting Bin
-  Rotten Egg .............. +10   birdcage farming
-  Glommer's Goop .......... +25   one per full moon
+WHAT HE EATS
+  - Poop, Guano and Compost are food for Slurg only.
+  - Food never costs him health or hunger.
+  - Spoiled food is worth full value.
+  - Monster meat and raw meat cost him nothing.
+  - Anything that would damage him costs sanity instead.
+  - Mushrooms also refill 2% of his stomach.
 
-At the level cap he reaches 300 health, a 1000 stomach, 2.5x damage and
-triple size.
+LEVELS PER ITEM
+  Rot, Spoiled Fish ....... +1
+  Poop, Guano ............. +2
+  Wet Goop ................ +3
+  Compost ................. +5
+  Rotten Egg .............. +10
+  Glommer's Goop .......... +25
 
-HE EATS WHAT NOBODY ELSE WILL
-  - Poop, Guano and Compost become food, for Slurg alone.
-  - Food can never cost him health or hunger.
-  - Spoiled food loses none of its value to him.
-  - Monster food and raw meat carry no penalty of any kind.
+AT LEVEL 0 AND LEVEL 5000
+  Health ......... 50  ->  300
+  Stomach ....... 100  ->  1000
+  Damage ....... x1.0  ->  x2.5
+  Size ......... x1.5  ->  x3.0
 
-Sanity is the only meter eating can still cost him. Anything that would
-normally hurt him adds that damage onto the food's sanity cost, so a food
-that already drained sanity drains that much more of it. Durian normally
-takes 3 health and 5 sanity; for Slurg it takes 8 sanity and no health.
+SPEED
+Speed depends on how full he is. x1.00 is Wilson's running speed.
 
-Mushrooms are the one thing that still really hurts him. A raw Red Cap
-normally takes 20 health and no sanity, so for Slurg it takes 20 sanity.
+                  empty    half full    3/4 full or more
+  Level 0 .....   x0.75      x1.00           x1.25
+  Level 2500 ..   x0.88      x1.00           x1.50
+  Level 5000 ..   x1.00      x1.00           x1.75
 
-They do fill him, though. Every mushroom restores an extra 2% of his stomach
-on top of its own hunger, 2 at level 0 and 20 at the cap. Fungus is food and
-poison at once.
+An empty belly slows him down, but less and less as he levels. A full belly
+speeds him up, more and more as he levels.
 
-A FED SLURG IS A FAST SLURG
-His belly sets a speed bonus either side of normal: a quarter slower when
-empty, dead level with everyone at half full, a quarter faster at three
-quarters and above.
-
-Levelling then pulls the two halves apart. The reward for being full grows to
-three times its size, and the penalty for being empty wears away to nothing, so
-half a belly is always the break-even point. Speeds are multiples of Wilson's
-run, which is what every character is measured against:
-
-                       empty     half full    3/4 full or more
-  Level 0 .........    x0.75       x1.00          x1.25
-  Level 2500 ......    x0.88       x1.00          x1.50
-  Level 5000 ......    x1.00       x1.00          x1.75
-
-A full Level 0 Slurg matches a Walking Cane. A full maxed Slurg just edges out
-a Hound. By the cap, running on empty costs him nothing at all.
-
-His size grows with his Level too, half again to triple, but that is cosmetic
-and does not change how fast he moves.
-
-SLIME REGENERATION
-He heals himself, but only while fed. Below half a stomach it stops entirely.
-Above that it speeds up smoothly the fuller he is, and again the further he
-has levelled. Seconds per hit point:
+HEALING
+He heals on his own, but only above half a stomach. Seconds per hit point:
 
   belly          level 0    level 2500   level 5000
    50% .......... 240 .......... 85 .......... 30
    70% .......... 140 .......... 49 .......... 18
    90% ........... 40 .......... 14 ........... 5
 
-Every hunger point and every level counts, not just these, and both are even.
-Feeding him is worth a flat 5 seconds off the timer per point of hunger.
-Levelling halves the time every 1667 levels. A full belly divides it by six and
-the level cap by eight, for a best case of 5 seconds a hit point against a
-worst case of 240.
+Below half full he does not heal at all, at any Level.
 
-THE CATCH
-  - Fragile start. 50 health and a tiny stomach.
-  - Always hungry. He burns food 35% faster than everyone else.
-  - Feast or famine. Below half a stomach he stops healing entirely, at any
-    Level. The speed penalty wears off as he grows; the healing never does.
-
-Food tooltips from Item Info and Show Me display Slurg's real values, and
-only for players actually playing Slurg.
+Food tooltips from Item Info and Show Me show Slurg's real values.
 ]]
 author = "UnNerfable"
-version = "2.0" -- This is the version of the template. Change it to your own number.
+version = "2.5" -- This is the version of the template. Change it to your own number.
 
 -- This is the URL name of the mod's thread on the forum; the part after the ? and before the first & in the url
 -- forumthread = "/files/file/950-extended-sample-character/"
