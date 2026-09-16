@@ -1,8 +1,8 @@
 [h1]Slurg the Slime[/h1]
 
-Slurg eats rot, droppings and anything else that has gone bad. He starts weak and
-slow, and every piece of garbage he eats makes him permanently bigger, tougher
-and faster.
+Slurg eats rot, droppings and anything else that has gone bad. He starts frail and
+no quicker than anyone else, and every piece of garbage he eats makes him
+permanently bigger, tougher and faster.
 
 [hr][/hr]
 [h2]How he eats[/h2]
@@ -67,23 +67,36 @@ Poop, Guano and Compost cannot be eaten by any other character.
 [tr][td]Stomach[/td][td]100 hunger[/td][td]1000 hunger[/td][/tr]
 [tr][td]Damage[/td][td]x1.0[/td][td]x2.5[/td][/tr]
 [tr][td]Sanity[/td][td]150[/td][td]150[/td][/tr]
-[tr][td]Speed cap[/td][td]x1.25[/td][td]x2.00[/td][/tr]
-[tr][td]Size cap[/td][td]x1.50[/td][td]x3.00[/td][/tr]
+[tr][td]Speed cap[/td][td]x1.25[/td][td]x1.75[/td][/tr]
+[tr][td]Size[/td][td]x1.50[/td][td]x3.00[/td][/tr]
 [/table]
 
-Speed and size are caps he only reaches on a full stomach.
+His belly gives him a speed bonus either side of normal: a quarter slower when
+empty, dead level with everyone at half full, a quarter faster at three quarters.
+Levelling then pulls the two halves apart. The reward for being full grows to
+three times its size, while the penalty for being empty shrinks away to nothing,
+so a maxed Slurg runs from x1.00 to x1.75 with no downside left at all.
+Multipliers are against Wilson's run speed, so x1.00 means exactly as fast as
+Wilson.
 
 [table]
 [tr][th]Belly
 % full[/th][th]Speed
 Lv 0[/th][th]Speed
-Lv 5000[/th][th]Size
-Lv 0[/th][th]Size
+Lv 2500[/th][th]Speed
 Lv 5000[/th][/tr]
-[tr][td]0%[/td][td]x0.75[/td][td]x0.75[/td][td]x1.00[/td][td]x1.00[/td][/tr]
-[tr][td]50%[/td][td]x1.03[/td][td]x1.44[/td][td]x1.28[/td][td]x2.10[/td][/tr]
-[tr][td]90% or more[/td][td]x1.25[/td][td]x2.00[/td][td]x1.50[/td][td]x3.00[/td][/tr]
+[tr][td]0%[/td][td]x0.75[/td][td]x0.88[/td][td]x1.00[/td][/tr]
+[tr][td]25%[/td][td]x0.88[/td][td]x0.94[/td][td]x1.00[/td][/tr]
+[tr][td]50%[/td][td]x1.00[/td][td]x1.00[/td][td]x1.00[/td][/tr]
+[tr][td]75% or more[/td][td]x1.25[/td][td]x1.50[/td][td]x1.75[/td][/tr]
 [/table]
+
+Size is x1.50 at level 0 and x3.00 at level 5000, whatever he has eaten. It is
+cosmetic, and does not change how fast he moves.
+
+For scale: a full level 0 Slurg matches a Walking Cane (x1.25), and a full maxed
+Slurg just edges out a Hound (x1.67). A starving one is a quarter slower than
+everyone to begin with, and exactly average by the time he is maxed.
 
 [hr][/hr]
 [h2]Slime regeneration[/h2]
@@ -97,25 +110,29 @@ sec / hp[/th][th]Lv 3750
 sec / hp[/th][th]Lv 5000
 sec / hp[/th][/tr]
 [tr][td]under 50%[/td][td]no healing[/td][td]no healing[/td][td]no healing[/td][td]no healing[/td][td]no healing[/td][/tr]
-[tr][td]50%[/td][td]240[/td][td]137[/td][td]96[/td][td]74[/td][td]60[/td][/tr]
-[tr][td]60%[/td][td]190[/td][td]109[/td][td]76[/td][td]58[/td][td]48[/td][/tr]
-[tr][td]70%[/td][td]140[/td][td]80[/td][td]56[/td][td]43[/td][td]35[/td][/tr]
-[tr][td]80%[/td][td]90[/td][td]51[/td][td]36[/td][td]28[/td][td]22[/td][/tr]
-[tr][td]90% or more[/td][td]40[/td][td]23[/td][td]16[/td][td]12[/td][td]10[/td][/tr]
+[tr][td]50%[/td][td]240[/td][td]87[/td][td]53[/td][td]38[/td][td]30[/td][/tr]
+[tr][td]60%[/td][td]190[/td][td]69[/td][td]42[/td][td]30[/td][td]24[/td][/tr]
+[tr][td]70%[/td][td]140[/td][td]51[/td][td]31[/td][td]22[/td][td]18[/td][/tr]
+[tr][td]80%[/td][td]90[/td][td]33[/td][td]20[/td][td]14[/td][td]11[/td][/tr]
+[tr][td]90% or more[/td][td]40[/td][td]15[/td][td]9[/td][td]6[/td][td]5[/td][/tr]
 [/table]
 
 Both scales are smooth, not stepped: every hunger point and every level changes
-the rate. The rows are samples.
+the rate. The rows are samples. At the cap he heals eight times faster than a
+fresh Slurg, which outpaces his health bar growing six times bigger, so filling
+it up takes 33 minutes at level 0 and 25 at level 5000.
 
 [hr][/hr]
 [h2]The catch[/h2]
 
-[b]A slow start.[/b] 50 health, a 100 stomach, and rot worth only 2 hunger each.
+[b]A fragile start.[/b] 50 health, a 100 stomach, and rot worth only 2 hunger
+each.
 
 [b]Always hungry.[/b] He burns food 35% faster than anyone else.
 
-[b]Everything depends on his belly.[/b] Empty means slow, small and no healing,
-whatever his level.
+[b]An empty belly stops the healing dead.[/b] Below half full he regenerates
+nothing at all, at any level. The speed penalty for it does at least wear off as
+he grows, but the healing never comes back until he eats.
 
 [hr][/hr]
 [i]Food tooltips from Item Info and Show Me display Slurg's real values, and only

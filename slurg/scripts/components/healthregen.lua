@@ -14,8 +14,9 @@
 --
 -- Level then scales the whole thing by a coefficient running from
 -- SLURG_REGEN_COEFF_MIN at level 0 to SLURG_REGEN_COEFF_MAX at
--- SLURG_MAX_LEVEL, so a fresh Slurg regens at half speed no matter how
--- stuffed he is, and grows into the perk.
+-- SLURG_MAX_LEVEL. Those are 0.25 and 2.0, so a fresh Slurg heals at an
+-- EIGHTH the rate a maxed one does however stuffed he is, and grows into
+-- the perk. Best case is 5 seconds per hitpoint; worst is 240.
 --
 --     effective seconds per hp = period(hunger) / coefficient(level)
 --

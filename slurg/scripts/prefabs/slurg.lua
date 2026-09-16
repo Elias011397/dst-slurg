@@ -13,25 +13,55 @@ TUNING.SLURG_SANITY = 150
 
 -- leveling: eating spoiled food raises inst.level from 0 up to SLURG_MAX_LEVEL
 TUNING.SLURG_MAX_LEVEL = 5000
--- Effective in-game speed. These are real speeds as felt in game, NOT the
--- value that goes into locomotor.runspeed; see updatesize for why they differ.
--- For reference, TUNING.WILSON_RUN_SPEED is 6.
+-- Movement. Slurg's speed is a multiplier on Wilson's run, and it is built out
+-- of a signed bonus either side of x1.00:
 --
--- Speed ramps from EMPTY up to the level's top speed across the same fullness
--- band as size, so the range widens with level. Taking 4.0 as Slurg's nominal
--- speed, that is x0.75 empty rising to x1.25 full at level 0, and x0.75 rising
--- to x2.00 full at the cap. An empty belly is the same floor at every level.
-TUNING.SLURG_SPEED_EMPTY = 3.0  -- effective speed when empty, at every level
-TUNING.SLURG_SPEED_MIN = 5.0    -- effective speed when full, at level 0
-TUNING.SLURG_SPEED_MAX = 8.0    -- effective speed when full, at SLURG_MAX_LEVEL
--- Physical size. Level sets the CAP; how much of that cap Slurg actually
--- reaches is decided by how full he is. Size also multiplies movement speed,
--- so a hungry Slurg is both small and slow.
-TUNING.SLURG_SCALE_MIN = 1.5    -- size cap at level 0
-TUNING.SLURG_SCALE_MAX = 3.0    -- size cap at SLURG_MAX_LEVEL
-TUNING.SLURG_SCALE_NORMAL = 1.0 -- size when empty, same as everyone else
-TUNING.SLURG_SIZE_HUNGER_MIN = 0.01 -- below this he is normal sized
-TUNING.SLURG_SIZE_HUNGER_MAX = 0.90 -- at or above this he is at his cap
+--     b = bonus(fullness)
+--     multiplier = 1 + b * (b > 0 and levelmult or penaltymult)
+--
+-- bonus(fullness) runs -SWING when empty, 0 at SPEED_HUNGER_MID, and +SWING at
+-- SPEED_HUNGER_MAX and above.
+--
+-- Level then scales the bonus, and the two signs are scaled by DIFFERENT
+-- factors. Both run from 1x at level 0:
+--
+--   positive bonus  ->  x1 climbing to SPEED_LEVEL_MULT    (3x, a reward)
+--   negative bonus  ->  x1 fading to SPEED_PENALTY_MULT    (0x, forgiveness)
+--
+-- So levelling widens the upside and closes the downside at the same time. At
+-- level 0 he runs x0.75 empty to x1.25 full; at the cap he runs x1.00 empty to
+-- x1.75 full, with the whole first half of the belly flat at x1.00 because the
+-- penalty has been levelled away entirely.
+--
+-- The factors are applied to the BONUS, never to the whole multiplier, so the
+-- top end is 1 + 0.25*3 = x1.75 and not 1.25*3 = x3.75.
+--
+-- x1.00 means as fast as Wilson, TUNING.WILSON_RUN_SPEED = 6, which is the
+-- yardstick every character is measured against -- Klei annotate their own that
+-- way (tuning.lua:4636 BEAVER_RUN_SPEED = 6.6, --x1.1 speed).
+TUNING.SLURG_SPEED_SWING = 0.25       -- +/- this either side of x1.00, pre-level
+TUNING.SLURG_SPEED_LEVEL_MULT = 3.0   -- positive bonus is multiplied UP to this
+TUNING.SLURG_SPEED_PENALTY_MULT = 0.0 -- negative bonus is faded DOWN to this
+TUNING.SLURG_SPEED_HUNGER_MID = 0.50  -- fullness where the multiplier is x1.00
+TUNING.SLURG_SPEED_HUNGER_MAX = 0.75  -- at or above this the bonus is maxed
+-- Physical size, a function of level alone. Purely cosmetic as far as speed is
+-- concerned: the engine multiplies motor velocity by the Transform scale, so
+-- updaterunspeed divides it straight back out. Klei do the same wherever a
+-- mob's scale differs from the base it is tuned against, and in every case the
+-- division lands the FELT speed exactly on the named constant:
+--
+--   warglet.lua:245,275   scale 1.5, runspeed HOUND_SPEED * (1/1.5) -> 10.0
+--   rocky.lua:89          ROCKY_WALK_SPEED / scale, held flat as it grows
+--   shadowchesspieces:247 SHADOW_KNIGHT.SPEED[level] / scale
+--   SGshadow_bishop:84    2 / scale
+--
+-- Writing "HOUND_SPEED * (1/scale)" is a strange way to say "two thirds of a
+-- hound" and an obvious way to say "cancel the scale so it moves like one".
+-- Mobs with a fixed scale (babybeefalo, bunnyman, beequeen, bernie_big) set
+-- flat speeds with no division, but that proves nothing either way: with scale
+-- constant, any correction is already baked into the number.
+TUNING.SLURG_SCALE_MIN = 1.5    -- size at level 0
+TUNING.SLURG_SCALE_MAX = 3.0    -- size at SLURG_MAX_LEVEL
 -- max hunger scales from SLURG_HUNGER at level 0 to this at SLURG_MAX_LEVEL
 TUNING.SLURG_HUNGER_MAX = 1000
 -- mushrooms restore this share of his stomach on top of their own hunger
@@ -41,10 +71,18 @@ TUNING.SLURG_MUSHROOM_HUNGER_PCT = 0.02
 TUNING.SLURG_REGEN_TICK = 1            -- seconds between regen ticks
 TUNING.SLURG_REGEN_HUNGER_MIN = 0.50   -- no regen below this fullness
 TUNING.SLURG_REGEN_HUNGER_PEAK = 0.90  -- fastest regen at or above this fullness
-TUNING.SLURG_REGEN_PERIOD_FLOOR = 60   -- seconds per hp at HUNGER_MIN
-TUNING.SLURG_REGEN_PERIOD_PEAK = 10    -- seconds per hp at HUNGER_PEAK
-TUNING.SLURG_REGEN_COEFF_MIN = 0.25    -- regen speed multiplier at level 0
-TUNING.SLURG_REGEN_COEFF_MAX = 1.0     -- regen speed multiplier at SLURG_MAX_LEVEL
+-- PERIOD_* are pre-level, so the numbers you actually feel are PERIOD / COEFF.
+-- The four corners those four constants produce:
+--
+--                    50% full     90% full and up
+--     level 0          240s             40s
+--     level 5000        30s              5s
+--
+-- COEFF_MAX is 8x COEFF_MIN, which is where the 240->30 and 40->5 come from.
+TUNING.SLURG_REGEN_PERIOD_FLOOR = 60   -- seconds per hp at HUNGER_MIN, pre-level
+TUNING.SLURG_REGEN_PERIOD_PEAK = 10    -- seconds per hp at HUNGER_PEAK, pre-level
+TUNING.SLURG_REGEN_COEFF_MIN = 0.25    -- regen rate multiplier at level 0
+TUNING.SLURG_REGEN_COEFF_MAX = 2.0     -- regen rate multiplier at SLURG_MAX_LEVEL
 
 -- char starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.SLURG = {
@@ -67,51 +105,70 @@ local function onbecameghost(inst)
 	inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "slurg_speed_mod")
 end
 
--- Slurg swells as he fills up. An empty Slurg is normal sized like anyone
--- else; he reaches the size cap his level allows at SLURG_SIZE_HUNGER_MAX
--- fullness, interpolated so every hunger point in between counts.
---
--- Because in-game speed is runspeed multiplied by Transform scale, this
--- throttles his speed at the same time: a starving Slurg is slow whatever
--- his level, and only a full one gets the speed his level has earned.
-local function updatesize(inst)
+-- Sets locomotor.runspeed from how full Slurg is and how far he has levelled.
+-- See the movement block at the top of this file for the shape of the curve and
+-- for why the Transform scale is divided back out at the end.
+local function updaterunspeed(inst)
 	local hunger = inst.components.hunger
-	if hunger == nil then
+	if hunger == nil or inst.components.locomotor == nil then
 		return
 	end
 
-	local cap = inst.scalecap or TUNING.SLURG_SCALE_MIN
-	local topspeed = inst.topspeed or TUNING.SLURG_SPEED_MIN
-	local span = TUNING.SLURG_SIZE_HUNGER_MAX - TUNING.SLURG_SIZE_HUNGER_MIN
-	local t = math.clamp((hunger:GetPercent() - TUNING.SLURG_SIZE_HUNGER_MIN) / span, 0, 1)
+	local pct = hunger:GetPercent()
+	local swing = TUNING.SLURG_SPEED_SWING
+	local mid = TUNING.SLURG_SPEED_HUNGER_MID
+	local max = TUNING.SLURG_SPEED_HUNGER_MAX
 
-	local scale = TUNING.SLURG_SCALE_NORMAL + ((cap - TUNING.SLURG_SCALE_NORMAL) * t)
-	inst:ApplyScale("sizecorrection", scale)
-
-	-- Speed has its own curve rather than riding on size, so the two can be
-	-- tuned apart. The engine multiplies runspeed by the Transform scale
-	-- (locomotor.lua:730), so divide the scale back out to land on the
-	-- effective speed we actually want.
-	if inst.components.locomotor ~= nil then
-		local effective = TUNING.SLURG_SPEED_EMPTY + ((topspeed - TUNING.SLURG_SPEED_EMPTY) * t)
-		inst.components.locomotor.runspeed = effective / scale
+	-- signed distance from x1.00, before level is taken into account
+	local bonus
+	if pct >= max then
+		bonus = swing
+	elseif pct >= mid then
+		bonus = swing * ((pct - mid) / (max - mid))
+	else
+		bonus = -swing * (1 - math.clamp(pct / mid, 0, 1))
 	end
+
+	-- Levels scale the bonus, with a different factor for each sign: the reward
+	-- for being full grows, and the penalty for being empty shrinks away.
+	if bonus > 0 then
+		bonus = bonus * (inst.speedlevelmult or 1)
+	elseif bonus < 0 then
+		bonus = bonus * (inst.speedpenaltymult or 1)
+	end
+
+	-- The engine multiplies motor velocity by the Transform scale, so divide the
+	-- scale back out to land on the multiplier we actually want to feel.
+	local target = TUNING.WILSON_RUN_SPEED * (1 + bonus)
+	inst.components.locomotor.runspeed =
+		target / (inst.bodyscale or TUNING.SLURG_SCALE_MIN)
 end
 
--- Recalculate everything that scales with Slurg's level: size cap, speed,
--- damage, max health and max hunger. Health and hunger are put back to the
--- percentage they were at, so raising the maxes never silently heals or feeds
--- him.
+-- Recalculate everything that scales with Slurg's level: size, the speed bonus
+-- multiplier, damage, max health and max hunger. Health and hunger are put back
+-- to the percentage they were at, so raising the maxes never silently heals or
+-- feeds him. The speed itself is worked out per hunger tick in updaterunspeed;
+-- this only hands it the two level-derived numbers it needs.
 local function applyupgrades(inst)
 	local healthbonus = .05
 	local damagebonus = .0003
 	local hungerbonus = (TUNING.SLURG_HUNGER_MAX - TUNING.SLURG_HUNGER) / TUNING.SLURG_MAX_LEVEL
 	local levelpct = inst.level / TUNING.SLURG_MAX_LEVEL
-	-- Level only sets the cap. updatesize decides how much of it he is at.
-	inst.scalecap = TUNING.SLURG_SCALE_MIN + ((TUNING.SLURG_SCALE_MAX - TUNING.SLURG_SCALE_MIN) * levelpct)
 
-	-- Top speed for this level, reached at full. updatesize ramps up to it.
-	inst.topspeed = TUNING.SLURG_SPEED_MIN + ((TUNING.SLURG_SPEED_MAX - TUNING.SLURG_SPEED_MIN) * levelpct)
+	-- Size is set from level alone, here and nowhere else. updaterunspeed reads
+	-- it back to cancel the engine's scale multiply, so growing does not change
+	-- how fast he feels.
+	inst.bodyscale = TUNING.SLURG_SCALE_MIN
+		+ ((TUNING.SLURG_SCALE_MAX - TUNING.SLURG_SCALE_MIN) * levelpct)
+	inst:ApplyScale("sizecorrection", inst.bodyscale)
+
+	-- The two level factors updaterunspeed applies to the speed bonus. Both start
+	-- at 1x: the first climbs, the second fades to nothing.
+	inst.speedlevelmult = 1
+		+ ((TUNING.SLURG_SPEED_LEVEL_MULT - 1) * levelpct)
+	inst.speedpenaltymult = 1
+		+ ((TUNING.SLURG_SPEED_PENALTY_MULT - 1) * levelpct)
+
 	local newhealth = math.floor(TUNING.SLURG_HEALTH + (inst.level * healthbonus))
 	local newdamage = (1.0 + (damagebonus * inst.level))
 	local newhunger = TUNING.SLURG_HUNGER + (inst.level * hungerbonus)
@@ -125,7 +182,7 @@ local function applyupgrades(inst)
 	inst.components.health:SetPercent(health_percent)
 	inst.components.hunger:SetPercent(hunger_percent)
 
-	updatesize(inst)
+	updaterunspeed(inst)
 end
 
 local function onsave(inst, data)
@@ -367,8 +424,8 @@ local master_postinit = function(inst)
 	-- Uncomment if "wathgrithr"(Wigfrid) or "webber" voice is used
     inst.talker_path_override = "dontstarve_DLC001/characters/"
 	-- Hunger ticks once a second (hunger.lua UPDATE_PERIOD) and pushes this on
-	-- every change, so it doubles as the size update without its own task.
-	inst:ListenForEvent("hungerdelta", function() updatesize(inst) end)
+	-- every change, so it doubles as the speed update without its own task.
+	inst:ListenForEvent("hungerdelta", function() updaterunspeed(inst) end)
 	inst.OnSave = onsave 
     inst.OnLoad = onload
 	-- Stats

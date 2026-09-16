@@ -1,13 +1,15 @@
 -- This information tells other players more about the mod
 name = "Slurg"
 description = [[
-A scavenger who turns the world's garbage into growth. Slurg starts small,
-frail and slow, then eats his way into becoming the biggest thing on the map.
+A scavenger who turns the world's garbage into growth. Slurg starts frail and
+no quicker than anyone else, then eats his way into becoming the biggest and
+fastest thing on the map.
 
 EAT GARBAGE, GROW
 Eating any type of rotted food or excrement will raise his Level, permanently
-increasing his health, stomach and damage, and raising the cap on his size
-and speed. Richer garbage is worth far more:
+increasing his health, stomach, damage and size, tripling the speed a full belly
+is worth to him, and wearing down the penalty for an empty one. Richer garbage
+is worth far more:
 
   Rot, Spoiled Fish ....... +1    constant, everywhere
   Poop, Guano ............. +2    beefalo, pigs, caves
@@ -37,12 +39,26 @@ They do fill him, though. Every mushroom restores an extra 2% of his stomach
 on top of its own hunger, 2 at level 0 and 20 at the cap. Fungus is food and
 poison at once.
 
-A FULL SLURG IS A FAST SLURG
-He swells as he fills up and shrinks as he empties, and his size carries his
-speed with it. Running on empty he is normal sized and a quarter slower than
-his usual pace, at every level, however much he has eaten in his life. Filled
-up he reaches triple size and double speed at the cap. All that progress is
-only worth something if you keep him fed.
+A FED SLURG IS A FAST SLURG
+His belly sets a speed bonus either side of normal: a quarter slower when
+empty, dead level with everyone at half full, a quarter faster at three
+quarters and above.
+
+Levelling then pulls the two halves apart. The reward for being full grows to
+three times its size, and the penalty for being empty wears away to nothing, so
+half a belly is always the break-even point. Speeds are multiples of Wilson's
+run, which is what every character is measured against:
+
+                       empty     half full    3/4 full or more
+  Level 0 .........    x0.75       x1.00          x1.25
+  Level 2500 ......    x0.88       x1.00          x1.50
+  Level 5000 ......    x1.00       x1.00          x1.75
+
+A full Level 0 Slurg matches a Walking Cane. A full maxed Slurg just edges out
+a Hound. By the cap, running on empty costs him nothing at all.
+
+His size grows with his Level too, half again to triple, but that is cosmetic
+and does not change how fast he moves.
 
 SLIME REGENERATION
 He heals himself, but only while fed. Below half a stomach it stops entirely.
@@ -50,16 +66,19 @@ Above that it speeds up smoothly the fuller he is, and again the further he
 has levelled. Seconds per hit point:
 
   belly          level 0    level 2500   level 5000
-   50% .......... 240 .......... 96 .......... 60
-   70% .......... 140 .......... 56 .......... 35
-   90% ........... 40 .......... 16 .......... 10
+   50% .......... 240 .......... 53 .......... 30
+   70% .......... 140 .......... 31 .......... 18
+   90% ........... 40 ........... 9 ........... 5
 
-Every hunger point and every level counts, not just these.
+Every hunger point and every level counts, not just these. At the cap he heals
+eight times faster than a fresh Slurg, which more than covers his health bar
+being six times bigger.
 
 THE CATCH
   - Fragile start. 50 health and a tiny stomach.
   - Always hungry. He burns food 35% faster than everyone else.
-  - Feast or famine. Empty means small, slow and no healing.
+  - Feast or famine. Below half a stomach he stops healing entirely, at any
+    Level. The speed penalty wears off as he grows; the healing never does.
 
 Food tooltips from Item Info and Show Me display Slurg's real values, and
 only for players actually playing Slurg.
