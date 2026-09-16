@@ -44,9 +44,9 @@ HEALING
 He heals on his own, but only above half a stomach. Seconds per hit point:
 
   belly          level 0    level 2500   level 5000
-   50% .......... 240 .......... 85 .......... 30
-   70% .......... 140 .......... 49 .......... 18
-   90% ........... 40 .......... 14 ........... 5
+   50% .......... 240 ......... 135 .......... 30
+   70% .......... 140 .......... 79 .......... 18
+   90% ........... 40 .......... 22 ........... 5
 
 Below half full he does not heal at all, at any Level.
 

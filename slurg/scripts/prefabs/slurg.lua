@@ -71,34 +71,26 @@ TUNING.SLURG_MUSHROOM_HUNGER_PCT = 0.02
 TUNING.SLURG_REGEN_TICK = 1            -- seconds between regen ticks
 TUNING.SLURG_REGEN_HUNGER_MIN = 0.50   -- no regen below this fullness
 TUNING.SLURG_REGEN_HUNGER_PEAK = 0.90  -- fastest regen at or above this fullness
--- Seconds per hitpoint is BASE divided by two independent divisors:
---
---     sec/hp = BASE / (hungerdiv * leveldiv)
---
--- The four corners:
+-- Seconds per hitpoint is a bilinear blend of these four corners, so both
+-- axes are linear in seconds and neither is front- or back-loaded in them:
 --
 --                    50% full     90% full and up
---     level 0        240s (/1)       40s (/6)
---     level 5000      30s (/8)        5s (/48)
+--     level 0          240s             40s
+--     level 5000        30s              5s
 --
--- The two axes are interpolated DIFFERENTLY, on purpose.
+-- Every equal step of either input is worth a fixed number of seconds. At
+-- level 0 that is 5s per hunger point; at 50% fullness it is 52.5s per 1250
+-- levels. Both stay constant all the way along, which is the point.
 --
--- Fullness is linear in SECONDS: a straight line from 240s down to 240/6 =
--- 40s across HUNGER_MIN..HUNGER_PEAK. Every hunger point in that band is
--- worth the same fixed number of seconds, 5s each at level 0.
---
--- Level is exponential, LEVEL_DIV^t rather than 1 + 7t. Applying a divisor
--- linearly makes the time a reciprocal of a straight line, and a reciprocal
--- collapses early: at 1 + 7t the first 1250 levels alone were worth 73% of the
--- whole 240s -> 30s gain and the last 1250 were worth 4%. At 8^t every equal
--- slice of levelling is worth the same PROPORTIONAL gain instead, x1.682 per
--- 1250 levels, which is a straight halving of the time every 1667 levels.
---
--- Fullness does not need that treatment because it is already expressed in
--- seconds rather than as a divisor, so it was never front-loaded.
-TUNING.SLURG_REGEN_BASE = 240          -- sec/hp with both divisors at 1
-TUNING.SLURG_REGEN_HUNGER_DIV = 6      -- fullness divides the time by up to this
-TUNING.SLURG_REGEN_LEVEL_DIV = 8       -- level divides the time by up to this
+-- The trade-off, worth knowing before retuning these: seconds per hitpoint and
+-- healing RATE are reciprocals, so making the seconds even necessarily makes
+-- the rate uneven. In hp/min at 50% fullness the five level marks give 0.25,
+-- 0.32, 0.44, 0.73, 2.00 -- most of the throughput lands in the last quarter
+-- of levelling. Even seconds was the requirement, so that is what these are.
+TUNING.SLURG_REGEN_SEC_LV0_HALF = 240  -- level 0,   at HUNGER_MIN
+TUNING.SLURG_REGEN_SEC_LV0_FULL = 40   -- level 0,   at HUNGER_PEAK
+TUNING.SLURG_REGEN_SEC_CAP_HALF = 30   -- level cap, at HUNGER_MIN
+TUNING.SLURG_REGEN_SEC_CAP_FULL = 5    -- level cap, at HUNGER_PEAK
 
 -- char starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.SLURG = {

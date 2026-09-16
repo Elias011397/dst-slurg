@@ -4,26 +4,23 @@
 -- How fast Slurg heals depends on how full he is, and on how far he has
 -- levelled.
 --
--- Two divisors, applied to SLURG_REGEN_BASE seconds per hitpoint:
+-- Seconds per hitpoint is a straight bilinear blend of four tuned corners,
+-- so BOTH axes are linear in seconds:
 --
---     effective seconds per hp = period(hunger) / coefficient(level)
---                              = BASE / (hungerdiv * leveldiv)
+--                      50% full      90% full and up
+--     level 0            240s              40s
+--     level 5000          30s               5s
 --
--- Hunger sets the first, and it is LINEAR IN SECONDS: no regen at all below
--- SLURG_REGEN_HUNGER_MIN, then a straight line from BASE down to
--- BASE / SLURG_REGEN_HUNGER_DIV at SLURG_REGEN_HUNGER_PEAK, flat above it.
--- Every hunger point in the band is therefore worth the same fixed number of
--- seconds -- 5s each at level 0, where the belly holds 100.
+-- Linear in fullness at any level, and linear in level at any fullness. Every
+-- equal step of either input is worth the same fixed number of seconds -- at
+-- level 0 that is 5s per hunger point, and at 50% fullness it is 52.5s per
+-- 1250 levels. Nothing is front-loaded and nothing is raised to a power.
 --
--- Level sets the second, and it is EXPONENTIAL: SLURG_REGEN_LEVEL_DIV raised
--- to the normalised level. That is deliberate and the two are not the same
--- shape on purpose. A divisor applied linearly makes the resulting time a
--- reciprocal of a straight line, which dumps most of the gain into the first
--- few levels; raising it to a power instead gives every equal slice of
--- levelling the same proportional pay-off. See the SLURG_REGEN_* block in
--- prefabs/slurg.lua.
+-- No regen at all below SLURG_REGEN_HUNGER_MIN. Above SLURG_REGEN_HUNGER_PEAK
+-- the fullness half stops improving and holds at its best.
 --
--- Best case is 5 seconds per hitpoint, worst is 240.
+-- Note this does NOT factor into a period times a coefficient, so there is a
+-- single lookup rather than the two it used to have.
 --
 -- Because the rate slides around continuously, we tick on a fixed interval
 -- and bank fractional progress, spending it only in whole hitpoints. That
@@ -44,23 +41,23 @@ local HealthRegen = Class(function(self, inst)
 	end)
 end)
 
--- Seconds per hitpoint at this fullness, or nil when regen is switched off.
-function HealthRegen:GetPeriod(hungerpct)
+-- Seconds per hitpoint right now, or nil when regen is switched off.
+function HealthRegen:GetSecondsPerHitpoint(hungerpct)
 	if hungerpct < TUNING.SLURG_REGEN_HUNGER_MIN then
 		return nil
 	end
-	local span = TUNING.SLURG_REGEN_HUNGER_PEAK - TUNING.SLURG_REGEN_HUNGER_MIN
-	local t = math.min((hungerpct - TUNING.SLURG_REGEN_HUNGER_MIN) / span, 1)
-	-- linear in SECONDS, not in the divisor, so every hunger point is worth
-	-- the same fixed number of seconds
-	return Lerp(TUNING.SLURG_REGEN_BASE,
-		TUNING.SLURG_REGEN_BASE / TUNING.SLURG_REGEN_HUNGER_DIV, t)
-end
 
--- How much faster Slurg's current level makes him heal, 1x up to LEVEL_DIV.
-function HealthRegen:GetCoefficient()
-	local t = math.min((self.inst.level or 0) / TUNING.SLURG_MAX_LEVEL, 1)
-	return TUNING.SLURG_REGEN_LEVEL_DIV ^ t
+	local span = TUNING.SLURG_REGEN_HUNGER_PEAK - TUNING.SLURG_REGEN_HUNGER_MIN
+	local ht = math.min((hungerpct - TUNING.SLURG_REGEN_HUNGER_MIN) / span, 1)
+	local lt = math.min((self.inst.level or 0) / TUNING.SLURG_MAX_LEVEL, 1)
+
+	-- interpolate along fullness at each end of the level range, then between
+	-- those two results along level
+	local atlv0 = Lerp(TUNING.SLURG_REGEN_SEC_LV0_HALF,
+		TUNING.SLURG_REGEN_SEC_LV0_FULL, ht)
+	local atcap = Lerp(TUNING.SLURG_REGEN_SEC_CAP_HALF,
+		TUNING.SLURG_REGEN_SEC_CAP_FULL, ht)
+	return Lerp(atlv0, atcap, lt)
 end
 
 function HealthRegen:OnTick(dt)
@@ -73,12 +70,12 @@ function HealthRegen:OnTick(dt)
 		return
 	end
 
-	local period = self:GetPeriod(hunger:GetPercent())
-	if period == nil then
+	local secperhp = self:GetSecondsPerHitpoint(hunger:GetPercent())
+	if secperhp == nil then
 		return
 	end
 
-	self.progress = self.progress + ((dt * self:GetCoefficient()) / period)
+	self.progress = self.progress + (dt / secperhp)
 
 	local gained = math.floor(self.progress)
 	if gained > 0 then
